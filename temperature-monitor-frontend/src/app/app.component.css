@@ -1,0 +1,12 @@
+.main-content {
+  display: flex;
+  justify-content: center;
+}
+
+.headline {
+
+}
+
+.centerText{
+  text-align: center;
+}
