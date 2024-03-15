@@ -1,9 +1,11 @@
-<h2>Sensor Konfiguration</h2>
-<ul class="sensors">
-  <li class="sensor" *ngFor="let sensor of sensors">
-    <span class="id">ID: {{sensor.id}}</span>
-    <label for="sensor-name">Name: </label>
-    <input id="sensor-name" [(ngModel)]="sensor.name" placeholder="Sensorname">
-  </li>
-</ul>
-<button (click)="onSave()">Speichern</button>
+<div class="sensorConfig">
+  <h2>Sensor Konfiguration</h2>
+  <ul class="sensors">
+    <li class="sensor" *ngFor="let sensor of sensors">
+      <span class="id">ID: {{sensor.id}}</span>
+      <label for="sensor-name">Name: </label>
+      <input id="sensor-name" [(ngModel)]="sensor.name" placeholder="Sensorname">
+    </li>
+  </ul>
+  <button (click)="onSave()">Speichern</button>
+</div>
