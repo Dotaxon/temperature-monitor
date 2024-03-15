@@ -1,6 +1,7 @@
-<div class="sidenav">
-  <a class="closebtn">&times;</a>
-  <a>test1</a>
-  <a>test1</a>
-  <a>test1</a>
+<div class="sidenav" [style.width]="isOpen ? '300px' : '0px' ">
+  <a class="closeBtn" (click)="onClose()">&times;</a>
+  <a *ngFor="let element of sidebarElements" routerLink="{{element.path}}">{{element.name}}</a>
+</div>
+<div>
+  <span class="openBtn"  (click)="onOpen()">&#9776;</span>
 </div>
