@@ -55,8 +55,8 @@ func createTables() {
 		PRIMARY KEY("weekID")
 	);`)
 
-	_, _ = database.Exec(`CREATE TABLE IF NOT EXISTS"sensor" (
-		"sensorID"	INTEGER NOT NULL,
+	_, _ = database.Exec(`CREATE TABLE IF NOT EXISTS "sensor" (
+		"sensorID"	TEXT NOT NULL,
 		"name"	TEXT,
 		PRIMARY KEY("sensorID")
 	);`)

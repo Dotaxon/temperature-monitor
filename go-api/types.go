@@ -7,6 +7,11 @@ type Sensor struct {
 	Name string `json:"name"`
 }
 
+type SensorWithTemp struct {
+	Sensor
+	Temp float32 `json:"temp"`
+}
+
 type DatePoint struct {
 	Time time.Time `json:"time"`
 	Temp float32   `json:"temp"`
