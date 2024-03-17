@@ -18,6 +18,10 @@ func initDatabase() {
 	createTables()
 }
 
+func createEntry() {
+
+}
+
 func createTables() {
 	_, _ = database.Exec(`CREATE TABLE IF NOT EXISTS "dataEntry" (
 		"entryID"	INTEGER NOT NULL,
@@ -31,28 +35,25 @@ func createTables() {
 	);`)
 
 	_, _ = database.Exec(`CREATE TABLE IF NOT EXISTS "hourCollection" (
-		"hourID"	INTEGER NOT NULL,
-		"time"	NUMERIC,
+		"hour"	NUMERIC NOT NULL,
 		"average"	REAL,
 		"dayID"	INTEGER,
-		PRIMARY KEY("hourID"),
+		PRIMARY KEY("hour"),
 		FOREIGN KEY("dayID") REFERENCES "dayCollection"("dayID")
 	);`)
 
 	_, _ = database.Exec(`CREATE TABLE IF NOT EXISTS "dayCollection" (
-		"dayID"	INTEGER NOT NULL,
-		"day"	NUMERIC,
+		"day"	NUMERIC NOT NULL,
 		"average"	REAL,
 		"weekID"	INTEGER,
-		FOREIGN KEY("weekID") REFERENCES "weekCollection"("weekID"),
-		PRIMARY KEY("dayID")
+		PRIMARY KEY("day"),
+		FOREIGN KEY("weekID") REFERENCES "weekCollection"("weekID")
 	);`)
 
 	_, _ = database.Exec(`CREATE TABLE IF NOT EXISTS "weekCollection" (
-		"weekID"	INTEGER NOT NULL,
-		"startDay"	NUMERIC,
+		"startDay"	NUMERIC NOT NULL,
 		"average"	REAL,
-		PRIMARY KEY("weekID")
+		PRIMARY KEY("startDay")
 	);`)
 
 	_, _ = database.Exec(`CREATE TABLE IF NOT EXISTS "sensor" (
