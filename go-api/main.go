@@ -8,7 +8,11 @@ import (
 const BindingAddr = "localhost:3000"
 
 func main() {
-	initDatabase()
+	err := initDatabaseManager()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	initSensors()
 
 	sensors := getAllSensorIDs()

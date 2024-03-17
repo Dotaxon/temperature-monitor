@@ -1,6 +1,6 @@
 #my own 
-.autosave
-.dia~
+*.autosave
+*.dia~
 
 
 # Logs

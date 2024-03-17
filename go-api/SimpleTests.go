@@ -5,13 +5,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"math/rand/v2"
 	"net/http"
-	"time"
+	Time "time"
 )
 
 func getTestData(context *gin.Context) {
 
 	dataPoints := DatePoint{
-		Time: time.Now().UTC(),
+		Time: Time.Now().UTC(),
 		Temp: rand.Float32() * 100,
 	}
 

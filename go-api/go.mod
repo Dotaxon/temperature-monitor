@@ -5,6 +5,7 @@ go 1.22
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/mattn/go-sqlite3 v1.14.22
+	github.com/yryz/ds18b20 v0.0.0-20200527154408-4a8f84bb82d4
 )
 
 require (
@@ -26,7 +27,6 @@ require (
 	github.com/rkusa/gm v0.0.0-20160203133140-acc6b6d0b64a // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
-	github.com/yryz/ds18b20 v0.0.0-20200527154408-4a8f84bb82d4 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
