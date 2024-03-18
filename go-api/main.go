@@ -1,34 +1,49 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 const BindingAddr = "localhost:3000"
 
+var Log *log.Logger
+
 func main() {
+	Log = log.Default()
+	Log.Println("Logger initialized")
+
 	err := initDatabaseManager()
 	if err != nil {
-		fmt.Println(err)
+		Log.Fatal(err)
 		return
 	}
-	initSensors()
+	err = initSensors()
+	if err != nil {
+		Log.Fatal(err)
+		return
+	}
 
 	sensors := getAllSensorIDs()
 	for _, sensor := range sensors {
 		temp, _ := getTemp(sensor)
-		fmt.Printf("Sensor %s has temperature %f \n", sensor, temp)
+		Log.Printf("Sensor %s has temperature %f \n", sensor, temp)
 	}
 
-	initRouter()
+	generateEntries(60*24*7 + 1)
+
+	err = initRouter()
+	if err != nil {
+		Log.Fatal(err)
+		return
+	}
 }
 
-func initRouter() {
+func initRouter() error {
 	var router *gin.Engine = gin.Default()
 	router.GET("/test/data", getTestData)
 	router.GET("/test/:id", getTestId)
 	router.POST("/test/data", addTest)
 	router.POST("/test/sensor", addTestSensor)
-	router.Run(BindingAddr)
+	return router.Run(BindingAddr)
 }

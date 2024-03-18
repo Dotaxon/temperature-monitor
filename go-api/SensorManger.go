@@ -8,8 +8,17 @@ import (
 
 var sensors []string
 
-func initSensors() {
+func initSensors() error {
 	refreshSensors()
+
+	for _, sensor := range sensors {
+		err := createSensorIfNotExists(Sensor{Id: sensor, Name: sensor})
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func refreshSensors() {

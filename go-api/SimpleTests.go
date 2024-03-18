@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"math/rand/v2"
 	"net/http"
 	Time "time"
@@ -29,11 +29,11 @@ func addTest(context *gin.Context) {
 
 	if err := context.BindJSON(&dataPoint); err != nil {
 		//error handling
-		fmt.Println("Ah error")
+		Log.Println("Ah error")
 		return
 	}
 
-	fmt.Printf("time: %s temp: %f", dataPoint.Time.String(), dataPoint.Temp)
+	Log.Printf("time: %s temp: %f", dataPoint.Time.String(), dataPoint.Temp)
 
 	context.IndentedJSON(http.StatusCreated, dataPoint)
 }
@@ -43,12 +43,28 @@ func addTestSensor(context *gin.Context) {
 
 	if err := context.BindJSON(&sensor); err != nil {
 		//error handling
-		fmt.Println(err)
-		fmt.Println("Ah error")
+		Log.Println(err)
+		Log.Println("Ah error")
 		return
 	}
 
-	fmt.Printf("Id: %s Name: %s \n", sensor.Id, sensor.Name)
+	Log.Printf("Id: %s Name: %s \n", sensor.Id, sensor.Name)
 
 	context.IndentedJSON(http.StatusCreated, sensor)
+}
+
+func generateEntries(amount int32) {
+	startTime := Time.Now()
+	time := Time.Date(2001, 1, 1, 0, 0, 0, 0, Time.UTC)
+	sensors := []string{"abc"}
+	for range amount {
+		for _, sensor := range sensors {
+			err := createEntry(time, sensor, float32(rand.Int32N(31)))
+			if err != nil {
+				log.Println(err)
+			}
+			time = time.Add(Time.Minute)
+		}
+	}
+	log.Printf("Created %d entries in %fs", amount, Time.Since(startTime).Seconds())
 }

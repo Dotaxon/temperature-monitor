@@ -1,0 +1,170 @@
+package main
+
+import (
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
+	"log"
+	Time "time"
+)
+
+var database *sql.DB
+
+func initDatabaseManager() error {
+	db, err := sql.Open("sqlite3", "./data.db")
+	if err != nil {
+		return err
+	}
+	database = db
+
+	createTables()
+	err = initStatements()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func createSensorIfNotExists(sensor Sensor) error {
+	_, err := createSensorStmt.Exec(sensor.Id, sensor.Name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func createEntry(time Time.Time, sensorID string, temperature float32) error {
+	timeUTC := time.UTC()
+	hourTime := getToHourReducedTimeUTC(timeUTC).Unix()
+	dayTime := getToDayReducedTimeUTC(timeUTC).Unix()
+	weekTime := getToWeekReducedTimeUTC(timeUTC).Unix() //Aka startDay
+
+	if !existsWeekTime(weekTime) {
+		_, err := createWeekStmt.Exec(weekTime, temperature)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err := updateWeekStmt.Exec(temperature, weekTime)
+		if err != nil {
+			return err
+		}
+	}
+
+	if !existsDayTime(dayTime) {
+		_, err := createDayStmt.Exec(dayTime, temperature, weekTime)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err := updateDayStmt.Exec(temperature, dayTime)
+		if err != nil {
+			return err
+		}
+	}
+
+	if !existsHourTime(hourTime) {
+		_, err := createHourStmt.Exec(hourTime, temperature, dayTime)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err := updateHourStmt.Exec(temperature, hourTime)
+		if err != nil {
+			return err
+		}
+	}
+
+	_, err := createDataEntryStmt.Exec(timeUTC.Unix(), temperature, sensorID, hourTime)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Expects a to hour reduced Time (like you get from getToHourReducedTimeUTC) in Unix format
+// and checks if it exists in the hour collection
+func existsHourTime(time int64) bool {
+	rows, err := existsHourStmt.Query(time)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	if !rows.Next() {
+		return false
+	}
+
+	err = rows.Close()
+	if err != nil {
+		log.Println("Unable to close row in existsHourTime")
+	}
+	return true
+}
+
+// Expects a to day reduced Time (like you get from getToDayReducedTimeUTC) in Unix format
+// and checks if it exists in the hour collection
+func existsDayTime(time int64) bool {
+	rows, err := existsDayStmt.Query(time)
+	if err != nil {
+		return false
+	}
+
+	if !rows.Next() {
+		return false
+	}
+
+	err = rows.Close()
+	if err != nil {
+		log.Println("Unable to close row in existsDayTime")
+	}
+	return true
+}
+
+// Expects a to week reduced Time (like you get from getToWeekReducedTimeUTC) in Unix format
+// and checks if it exists in the hour collection
+func existsWeekTime(time int64) bool {
+	rows, err := existsWeekStmt.Query(time)
+	if err != nil {
+		return false
+	}
+
+	if !rows.Next() {
+		return false
+	}
+
+	err = rows.Close()
+	if err != nil {
+		log.Println("Unable to close row in existsWeekTime")
+	}
+	return true
+}
+
+// Reduces a Time to their hour means min, sec and nsec are 0
+// also sets time to UTC
+func getToHourReducedTimeUTC(time Time.Time) Time.Time {
+	timeUTC := time.UTC()
+	hour := timeUTC.Hour()
+	year, month, day := timeUTC.Date()
+	return Time.Date(year, month, day, hour, 0, 0, 0, Time.UTC)
+}
+
+// Reduces a Time to their day means hour, min, sec and nsec are 0
+// also sets time to UTC
+func getToDayReducedTimeUTC(time Time.Time) Time.Time {
+	year, month, day := time.UTC().Date()
+	return Time.Date(year, month, day, 0, 0, 0, 0, Time.UTC)
+}
+
+// Reduces a Time to their week (start on Monday) means hour, min, sec and nsec are 0
+// and year, month and day are set to the previous monday
+// also sets time to UTC
+func getToWeekReducedTimeUTC(time Time.Time) Time.Time {
+	time = time.UTC()
+	for time.Weekday() != Time.Monday {
+		time = time.Add(Time.Minute * 60 * 24 * -1) //subtracts a day
+	}
+	year, month, day := time.Date()
+	return Time.Date(year, month, day, 0, 0, 0, 0, Time.UTC)
+}
