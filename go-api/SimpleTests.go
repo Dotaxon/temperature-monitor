@@ -55,12 +55,12 @@ func addTestSensor(context *gin.Context) {
 
 func generateEntries(amount int) {
 	startTime := Time.Now()
-	time := Time.Date(2001, 1, 1, 0, 0, 0, 0, Time.UTC
+	time := Time.Date(2001, 1, 1, 0, 0, 0, 0, Time.UTC)
 
 	sensors := getAllSensorIDs()
 
 	if len(sensors) == 0 {
-		sensors	= []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"}
+		sensors = []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"}
 		Log.Printf("Used artifical sensors")
 	}
 
@@ -73,5 +73,7 @@ func generateEntries(amount int) {
 		}
 		time = time.Add(Time.Minute)
 	}
-	log.Printf("Created %d entries in %fs", amount*len(sensors), Time.Since(startTime).Seconds())
+	neededTime := Time.Since(startTime).Seconds()
+	entries := amount * len(sensors)
+	log.Printf("Created %d entries in %fs with an average of %fs/entrie", entries, neededTime, neededTime/float64(entries))
 }
