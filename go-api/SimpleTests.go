@@ -53,18 +53,25 @@ func addTestSensor(context *gin.Context) {
 	context.IndentedJSON(http.StatusCreated, sensor)
 }
 
-func generateEntries(amount int32) {
+func generateEntries(amount int) {
 	startTime := Time.Now()
-	time := Time.Date(2001, 1, 1, 0, 0, 0, 0, Time.UTC)
-	sensors := []string{"abc"}
+	time := Time.Date(2001, 1, 1, 0, 0, 0, 0, Time.UTC
+
+	sensors := getAllSensorIDs()
+
+	if len(sensors) == 0 {
+		sensors	= []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"}
+		Log.Printf("Used artifical sensors")
+	}
+
 	for range amount {
 		for _, sensor := range sensors {
 			err := createEntry(time, sensor, float32(rand.Int32N(31)))
 			if err != nil {
 				log.Println(err)
 			}
-			time = time.Add(Time.Minute)
 		}
+		time = time.Add(Time.Minute)
 	}
-	log.Printf("Created %d entries in %fs", amount, Time.Since(startTime).Seconds())
+	log.Printf("Created %d entries in %fs", amount*len(sensors), Time.Since(startTime).Seconds())
 }

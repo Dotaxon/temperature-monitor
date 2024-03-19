@@ -18,11 +18,14 @@ func main() {
 		Log.Fatal(err)
 		return
 	}
+	Log.Println("Successfully initialized DatabaseManager")
+
 	err = initSensors()
 	if err != nil {
 		Log.Fatal(err)
 		return
 	}
+	Log.Println("Successfully initialized Sensors")
 
 	sensors := getAllSensorIDs()
 	for _, sensor := range sensors {
@@ -30,13 +33,14 @@ func main() {
 		Log.Printf("Sensor %s has temperature %f \n", sensor, temp)
 	}
 
-	generateEntries(60*24*7 + 1)
+	generateEntries(60*1 + 1)
 
 	err = initRouter()
 	if err != nil {
 		Log.Fatal(err)
 		return
 	}
+	Log.Println("Successfully initialized Router")
 }
 
 func initRouter() error {

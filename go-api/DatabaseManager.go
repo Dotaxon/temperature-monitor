@@ -15,13 +15,19 @@ func initDatabaseManager() error {
 		return err
 	}
 	database = db
+	Log.Println("Successfully opened DB")
 
-	createTables()
+	err = createTables()
+	if err != nil {
+		return err
+	}
+	Log.Println("Successfully created Tables")
+
 	err = initStatements()
 	if err != nil {
 		return err
 	}
-
+	Log.Println("Successfully initialized Statements")
 	return nil
 }
 
@@ -39,37 +45,37 @@ func createEntry(time Time.Time, sensorID string, temperature float32) error {
 	dayTime := getToDayReducedTimeUTC(timeUTC).Unix()
 	weekTime := getToWeekReducedTimeUTC(timeUTC).Unix() //Aka startDay
 
-	if !existsWeekTime(weekTime) {
-		_, err := createWeekStmt.Exec(weekTime, temperature)
+	if !existsWeekTime(weekTime, sensorID) {
+		_, err := createWeekStmt.Exec(weekTime, temperature, sensorID)
 		if err != nil {
 			return err
 		}
 	} else {
-		_, err := updateWeekStmt.Exec(temperature, weekTime)
+		_, err := updateWeekStmt.Exec(temperature, weekTime, sensorID)
 		if err != nil {
 			return err
 		}
 	}
 
-	if !existsDayTime(dayTime) {
-		_, err := createDayStmt.Exec(dayTime, temperature, weekTime)
+	if !existsDayTime(dayTime, sensorID) {
+		_, err := createDayStmt.Exec(dayTime, temperature, sensorID, weekTime)
 		if err != nil {
 			return err
 		}
 	} else {
-		_, err := updateDayStmt.Exec(temperature, dayTime)
+		_, err := updateDayStmt.Exec(temperature, dayTime, sensorID)
 		if err != nil {
 			return err
 		}
 	}
 
-	if !existsHourTime(hourTime) {
-		_, err := createHourStmt.Exec(hourTime, temperature, dayTime)
+	if !existsHourTime(hourTime, sensorID) {
+		_, err := createHourStmt.Exec(hourTime, temperature, sensorID, dayTime)
 		if err != nil {
 			return err
 		}
 	} else {
-		_, err := updateHourStmt.Exec(temperature, hourTime)
+		_, err := updateHourStmt.Exec(temperature, hourTime, sensorID)
 		if err != nil {
 			return err
 		}
@@ -85,8 +91,8 @@ func createEntry(time Time.Time, sensorID string, temperature float32) error {
 
 // Expects a to hour reduced Time (like you get from getToHourReducedTimeUTC) in Unix format
 // and checks if it exists in the hour collection
-func existsHourTime(time int64) bool {
-	rows, err := existsHourStmt.Query(time)
+func existsHourTime(time int64, sensorID string) bool {
+	rows, err := existsHourStmt.Query(time, sensorID)
 	if err != nil {
 		log.Println(err)
 		return false
@@ -105,8 +111,8 @@ func existsHourTime(time int64) bool {
 
 // Expects a to day reduced Time (like you get from getToDayReducedTimeUTC) in Unix format
 // and checks if it exists in the hour collection
-func existsDayTime(time int64) bool {
-	rows, err := existsDayStmt.Query(time)
+func existsDayTime(time int64, sensorID string) bool {
+	rows, err := existsDayStmt.Query(time, sensorID)
 	if err != nil {
 		return false
 	}
@@ -124,8 +130,8 @@ func existsDayTime(time int64) bool {
 
 // Expects a to week reduced Time (like you get from getToWeekReducedTimeUTC) in Unix format
 // and checks if it exists in the hour collection
-func existsWeekTime(time int64) bool {
-	rows, err := existsWeekStmt.Query(time)
+func existsWeekTime(time int64, sensorID string) bool {
+	rows, err := existsWeekStmt.Query(time, sensorID)
 	if err != nil {
 		return false
 	}
