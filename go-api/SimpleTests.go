@@ -58,15 +58,29 @@ func generateEntries(amount int) {
 	time := Time.Date(2001, 1, 1, 0, 0, 0, 0, Time.UTC)
 
 	sensors := getAllSensorIDs()
+	artificalSensors := false
 
 	if len(sensors) == 0 {
 		sensors = []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"}
+		artificalSensors = true
 		Log.Printf("Used artifical sensors")
 	}
 
+	var temperature float32
 	for range amount {
 		for _, sensor := range sensors {
-			err := createEntry(time, sensor, float32(rand.Int32N(31)))
+
+			if artificalSensors {
+				temperature = float32(rand.Int32N(31))
+			} else {
+				var err1 error = nil
+				temperature, err1 = getTemp(sensor)
+				if err1 != nil {
+					log.Println(err1)
+				}
+			}
+
+			err := createEntry(time, sensor, temperature)
 			if err != nil {
 				log.Println(err)
 			}
@@ -75,5 +89,5 @@ func generateEntries(amount int) {
 	}
 	neededTime := Time.Since(startTime).Seconds()
 	entries := amount * len(sensors)
-	log.Printf("Created %d entries in %fs with an average of %fs/entrie", entries, neededTime, neededTime/float64(entries))
+	log.Printf("Created %d entries in %fs with an average of %fs/entry", entries, neededTime, neededTime/float64(entries))
 }

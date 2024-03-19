@@ -28,6 +28,7 @@ func main() {
 	Log.Println("Successfully initialized Sensors")
 
 	sensors := getAllSensorIDs()
+	Log.Printf("Got %d sensors", len(sensors))
 	for _, sensor := range sensors {
 		temp, _ := getTemp(sensor)
 		Log.Printf("Sensor %s has temperature %f \n", sensor, temp)
