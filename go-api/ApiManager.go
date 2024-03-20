@@ -22,3 +22,7 @@ func updateSensorName(context *gin.Context) {
 	Log.Printf("Set Sensor name of %s (ID) to name: %s \n", sensor.Id, sensor.Name)
 	context.IndentedJSON(http.StatusCreated, sensor)
 }
+
+func getDataEntries(context *gin.Context) {
+
+}
