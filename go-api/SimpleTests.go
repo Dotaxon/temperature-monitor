@@ -57,7 +57,8 @@ func generateEntries(amount int) {
 	startTime := Time.Now()
 	time := Time.Date(2001, 1, 1, 0, 0, 0, 0, Time.UTC)
 
-	sensors := getAllSensorIDs()
+	sensors := getRefreshedSensorIDs()
+
 	artificalSensors := false
 
 	if len(sensors) == 0 {

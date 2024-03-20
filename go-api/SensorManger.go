@@ -4,13 +4,18 @@ import (
 	"fmt"
 	"github.com/rkusa/gm/math32"
 	"github.com/yryz/ds18b20"
+	"sync"
+	Time "time"
 )
 
 var sensors []string
+var sensorsMutex = sync.RWMutex{}
 
 func initSensors() error {
 	refreshSensors()
 
+	sensorsMutex.RLock()
+	defer sensorsMutex.RUnlock()
 	for _, sensor := range sensors {
 		err := createSensorIfNotExists(Sensor{Id: sensor, Name: sensor})
 		if err != nil {
@@ -18,16 +23,59 @@ func initSensors() error {
 		}
 	}
 
+	go sensorTrigger()
+
 	return nil
 }
 
+func sensorTrigger() {
+	for range Time.Tick(Time.Minute) {
+		go createMeasurement()
+	}
+}
+
+func createMeasurement() {
+	refreshSensors()
+
+	Log.Println("Tick")
+
+	sensorsMutex.RLock()
+	sensorList := make([]string, 0, len(sensors))
+	copy(sensorList, sensors)
+	sensorsMutex.RUnlock()
+
+	for _, sensor := range sensorList {
+		temp, err := getTemp(sensor)
+		if err != nil {
+			Log.Println(err)
+			continue
+		}
+
+		err = createEntry(Time.Now(), sensor, temp)
+		if err != nil {
+			Log.Println(err)
+			continue
+		}
+	}
+	Log.Println("Tack")
+}
+
 func refreshSensors() {
+	sensorsMutex.Lock()
+	defer sensorsMutex.Unlock()
 	sensors, _ = ds18b20.Sensors()
 }
 
-func getAllSensorIDs() []string {
+func getRefreshedSensorIDs() []string {
 	refreshSensors()
-	return sensors
+
+	sensorsMutex.RLock()
+	defer sensorsMutex.RUnlock()
+
+	sensorList := make([]string, 0, len(sensors))
+	copy(sensorList, sensors)
+
+	return sensorList
 }
 
 func getSensorTemp(sensor Sensor) (float32, error) {
@@ -44,6 +92,9 @@ func getTemp(sensor string) (float32, error) {
 
 func getTempsFrom(sensors []Sensor) ([]SensorWithTemp, error) {
 	list := make([]SensorWithTemp, len(sensors))
+
+	sensorsMutex.RLock()
+	defer sensorsMutex.RUnlock()
 
 	for _, sensor := range sensors {
 		temp, err := getSensorTemp(sensor)
