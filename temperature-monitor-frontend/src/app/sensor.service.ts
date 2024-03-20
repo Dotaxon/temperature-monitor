@@ -26,7 +26,7 @@ export class SensorService {
   }
 
   public getSensors(){
-    return this.http.get<Sensor[]>("http://localhost:3000/sensors")
+    return this.http.get<Sensor[]>("http://localhost:3000/sensors/")
     // return of(this.mockSensors);
   }
 
