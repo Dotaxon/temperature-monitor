@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/rkusa/gm/math32"
 	"log"
 	Time "time"
 )
@@ -102,7 +104,26 @@ func createEntry(time Time.Time, sensorID string, temperature float32) error {
 	return nil
 }
 
-//region existsTime
+//region Exists
+
+// ExitsSensor Checks if sensor exists
+func ExitsSensor(sensorID string) bool {
+	rows, err := existsSensorStmt.Query(sensorID)
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	if !rows.Next() {
+		return false
+	}
+
+	err = rows.Close()
+	if err != nil {
+		log.Println("Unable to close row in existsSensor")
+	}
+	return true
+}
 
 // Expects a to hour reduced Time (like you get from getToHourReducedTimeUTC) in Unix format
 // and checks if it exists in the hour collection
@@ -162,7 +183,7 @@ func existsWeekTime(time int64, sensorID string) bool {
 	return true
 }
 
-//endregion existsTime
+//endregion Exists
 
 //region getToReducedTimeUTC
 
@@ -195,3 +216,71 @@ func getToWeekReducedTimeUTC(time Time.Time) Time.Time {
 }
 
 //endregion getToReducedTimeUTC
+
+//region getData
+
+func GetEntryCollection(startTimeUnix int64, endTimeUnix int64, sensorID string, interval Interval) ([]SimpleDataPoint, error) {
+	var startTime Time.Time
+	var endTime Time.Time
+	var rows *sql.Rows
+	var err error
+	var difference float64
+
+	defer closeRows(rows)
+
+	switch interval {
+	case Minute:
+		startTime = Time.Unix(startTimeUnix, 0)
+		endTime = Time.Unix(endTimeUnix, 0)
+		difference = endTime.Sub(startTime).Minutes()
+		rows, err = getDataEntriesFromToOf.Query(startTime.Unix(), endTime.Unix(), sensorID)
+	case Hour:
+		startTime = getToHourReducedTimeUTC(Time.Unix(startTimeUnix, 0))
+		endTime = getToHourReducedTimeUTC(Time.Unix(endTimeUnix, 0))
+		difference = endTime.Sub(startTime).Hours()
+		rows, err = getHourEntriesFromToOf.Query(startTime.Unix(), endTime.Unix(), sensorID)
+	case Day:
+		startTime = getToDayReducedTimeUTC(Time.Unix(startTimeUnix, 0))
+		endTime = getToDayReducedTimeUTC(Time.Unix(endTimeUnix, 0))
+		difference = endTime.Sub(startTime).Hours() / 24
+		rows, err = getDayEntriesFromToOf.Query(startTime.Unix(), endTime.Unix(), sensorID)
+	case Week:
+		startTime = getToWeekReducedTimeUTC(Time.Unix(startTimeUnix, 0))
+		endTime = getToWeekReducedTimeUTC(Time.Unix(endTimeUnix, 0))
+		difference = endTime.Sub(startTime).Hours() / (24 * 7)
+		rows, err = getWeekEntriesFromToOf.Query(startTime.Unix(), endTime.Unix(), sensorID)
+	default:
+		err = fmt.Errorf("invalid interval %d is not in range", interval)
+	}
+
+	if err != nil {
+		Log.Println(err)
+		return nil, err
+	}
+
+	dataPoints := make([]SimpleDataPoint, 0, int64(difference)+1)
+
+	for rows.Next() {
+		var time int64 = 0
+		var temp float32 = math32.NaN()
+
+		if err := rows.Scan(&time, &temp); err != nil {
+			return nil, err
+		}
+		dataPoints = append(dataPoints, SimpleDataPoint{Time: time, Temp: temp})
+	}
+
+	return dataPoints, nil
+}
+
+func closeRows(rows *sql.Rows) {
+	if rows == nil {
+		return
+	}
+
+	if err := rows.Close(); err != nil {
+		Log.Println(err)
+	}
+}
+
+//endregion getData

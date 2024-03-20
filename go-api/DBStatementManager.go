@@ -27,6 +27,9 @@ var createWeekStmt *sql.Stmt
 
 //region existsStmts
 
+// Parameters: sensorID
+var existsSensorStmt *sql.Stmt
+
 // Parameters: hour (min, sec, nsec = 0), sensorID
 var existsHourStmt *sql.Stmt
 
@@ -59,6 +62,22 @@ var updateWeekStmt *sql.Stmt
 var updateSensorNameStmt *sql.Stmt
 
 //endregion updateStmts
+
+//region getStmts
+
+// Parameters startTime, endTime, sensorID
+var getDataEntriesFromToOf *sql.Stmt
+
+// Parameters startTime, endTime, sensorID
+var getHourEntriesFromToOf *sql.Stmt
+
+// Parameters startTime, endTime, sensorID
+var getDayEntriesFromToOf *sql.Stmt
+
+// Parameters startTime, endTime, sensorID
+var getWeekEntriesFromToOf *sql.Stmt
+
+//endregion getStmts
 
 func initStatements() error {
 	//region Create statements
@@ -94,6 +113,13 @@ func initStatements() error {
 	//endregion Create statements
 
 	//region Exists Statements
+
+	stmt, err = database.Prepare(`SELECT 1 FROM sensor WHERE sensorID = ?`)
+	if err != nil {
+		return err
+	}
+	existsSensorStmt = stmt
+
 	stmt, err = database.Prepare(`SELECT 1 FROM hourCollection h WHERE h.hour = ? AND h.sensorID = ?`)
 	if err != nil {
 		return err
@@ -150,6 +176,36 @@ func initStatements() error {
 	}
 	updateSensorNameStmt = stmt
 	//endregion UPDATE Statements
+
+	//region Get Statements
+	stmt, err = database.Prepare(
+		`SELECT time, temperature FROM dataEntry WHERE time >= ? AND time <= ? AND sensorID == ?`)
+	if err != nil {
+		return err
+	}
+	getDataEntriesFromToOf = stmt
+
+	stmt, err = database.Prepare(
+		`SELECT hour, average FROM hourCollection WHERE hour >= ? AND hour <= ? AND sensorID == ?`)
+	if err != nil {
+		return err
+	}
+	getHourEntriesFromToOf = stmt
+
+	stmt, err = database.Prepare(
+		`SELECT day, average FROM dayCollection WHERE day >= ? AND day <= ? AND sensorID == ?`)
+	if err != nil {
+		return err
+	}
+	getDayEntriesFromToOf = stmt
+
+	stmt, err = database.Prepare(
+		`SELECT startDay, average FROM weekCollection WHERE startDay >= ? AND startDay <= ? AND sensorID == ?`)
+	if err != nil {
+		return err
+	}
+	getWeekEntriesFromToOf = stmt
+	//endregion getStmts
 
 	return nil
 }

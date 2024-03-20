@@ -10,7 +10,7 @@ import (
 
 func getTestData(context *gin.Context) {
 
-	dataPoints := DatePoint{
+	dataPoints := DataPoint{
 		Time: Time.Now().UTC(),
 		Temp: rand.Float32() * 100,
 	}
@@ -25,7 +25,7 @@ func getTestId(context *gin.Context) {
 }
 
 func addTest(context *gin.Context) {
-	var dataPoint DatePoint
+	var dataPoint DataPoint
 
 	if err := context.BindJSON(&dataPoint); err != nil {
 		//error handling
@@ -72,6 +72,10 @@ func generateEntries(amount int) {
 
 			if artificalSensors {
 				temperature = float32(rand.Int32N(31))
+				_, err := createSensorStmt.Exec(sensor, sensor)
+				if err != nil {
+					log.Println(err)
+				}
 			} else {
 				var err1 error = nil
 				temperature, err1 = getTemp(sensor)
