@@ -239,6 +239,27 @@ func GetSensorEntry(sensorID string) (Sensor, error) {
 	return sensor, nil
 }
 
+func GetSensorEntries() ([]Sensor, error) {
+	rows, err := getSensorsStmt.Query()
+	defer closeRows(rows)
+	if err != nil {
+		return nil, err
+	}
+
+	sensors := make([]Sensor, 0, 20)
+
+	for rows.Next() {
+		var sensor Sensor
+		if err := rows.Scan(&sensor.Id, &sensor.Name); err != nil {
+			return nil, err
+		}
+
+		sensors = append(sensors, sensor)
+	}
+
+	return sensors, nil
+}
+
 func GetEntryCollection(startTimeUnix int64, endTimeUnix int64, sensorID string, interval Interval) ([]SimpleDataPoint, error) {
 	var startTime Time.Time
 	var endTime Time.Time

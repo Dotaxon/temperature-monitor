@@ -68,6 +68,9 @@ var updateSensorNameStmt *sql.Stmt
 // Parameters sensorID
 var getSensorStmt *sql.Stmt
 
+// Parameters no parameters
+var getSensorsStmt *sql.Stmt
+
 // Parameters startTime, endTime, sensorID
 var getDataEntriesFromToOf *sql.Stmt
 
@@ -187,6 +190,13 @@ func initStatements() error {
 		return err
 	}
 	getSensorStmt = stmt
+
+	stmt, err = database.Prepare(
+		`SELECT sensorID, name FROM sensor`)
+	if err != nil {
+		return err
+	}
+	getSensorsStmt = stmt
 
 	stmt, err = database.Prepare(
 		`SELECT time, temperature FROM dataEntry WHERE time >= ? AND time <= ? AND sensorID == ?`)

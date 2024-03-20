@@ -48,6 +48,7 @@ func initRouter() error {
 	var router *gin.Engine = gin.Default()
 	router.PATCH("/sensor/update", updateSensorName)
 	router.GET("/sensor/:id", getSensor)
+	router.GET("/sensors", getSensors)
 	router.GET("/data", getDataEntries)
 
 	router.GET("/test/data", getTestData)
