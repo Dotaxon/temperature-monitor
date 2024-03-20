@@ -219,6 +219,26 @@ func getToWeekReducedTimeUTC(time Time.Time) Time.Time {
 
 //region getData
 
+func GetSensorEntry(sensorID string) (Sensor, error) {
+	rows, err := getSensorStmt.Query(sensorID)
+	defer closeRows(rows)
+	if err != nil {
+		return Sensor{}, err
+	}
+
+	if !rows.Next() {
+		return Sensor{}, fmt.Errorf("sensor (%s) not found", sensorID)
+	}
+
+	var sensor Sensor
+	err = rows.Scan(&sensor.Id, &sensor.Name)
+	if err != nil {
+		return Sensor{}, err
+	}
+
+	return sensor, nil
+}
+
 func GetEntryCollection(startTimeUnix int64, endTimeUnix int64, sensorID string, interval Interval) ([]SimpleDataPoint, error) {
 	var startTime Time.Time
 	var endTime Time.Time

@@ -30,6 +30,17 @@ func updateSensorName(context *gin.Context) {
 	context.IndentedJSON(http.StatusCreated, sensor)
 }
 
+func getSensor(context *gin.Context) {
+	var id string = context.Param("id")
+
+	sensor, err := GetSensorEntry(id)
+	if err != nil {
+		context.IndentedJSON(http.StatusBadRequest, err)
+		return
+	}
+	context.IndentedJSON(http.StatusOK, sensor)
+}
+
 func getDataEntries(context *gin.Context) {
 	Log.Println("Tries to get data entries")
 	var body GetDataEntriesBody
