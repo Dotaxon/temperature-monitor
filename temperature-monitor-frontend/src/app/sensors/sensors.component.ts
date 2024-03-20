@@ -31,6 +31,7 @@ export class SensorsComponent {
 
     private getSensors(){
       this.sensorService.getSensors().subscribe(sensors => {
+        console.log("Here")
         this.sensors = sensors;
         console.log(sensors);
       });

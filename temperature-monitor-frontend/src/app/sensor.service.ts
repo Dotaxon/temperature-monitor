@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Sensor} from "../interfaces/sensor";
 import {of} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class SensorService {
 
   private mockSensors: Sensor[] = [];
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.generateMockSensors(15);
     console.log("constructor sensor service")
   }
@@ -25,7 +26,8 @@ export class SensorService {
   }
 
   public getSensors(){
-    return of(this.mockSensors);
+    return this.http.get<Sensor[]>("http://localhost:3000/sensors")
+    // return of(this.mockSensors);
   }
 
   public getSensor(id : string){
