@@ -102,6 +102,8 @@ func createEntry(time Time.Time, sensorID string, temperature float32) error {
 	return nil
 }
 
+//region existsTime
+
 // Expects a to hour reduced Time (like you get from getToHourReducedTimeUTC) in Unix format
 // and checks if it exists in the hour collection
 func existsHourTime(time int64, sensorID string) bool {
@@ -160,6 +162,10 @@ func existsWeekTime(time int64, sensorID string) bool {
 	return true
 }
 
+//endregion existsTime
+
+//region getToReducedTimeUTC
+
 // Reduces a Time to their hour means min, sec and nsec are 0
 // also sets time to UTC
 func getToHourReducedTimeUTC(time Time.Time) Time.Time {
@@ -187,3 +193,5 @@ func getToWeekReducedTimeUTC(time Time.Time) Time.Time {
 	year, month, day := time.Date()
 	return Time.Date(year, month, day, 0, 0, 0, 0, Time.UTC)
 }
+
+//endregion getToReducedTimeUTC
