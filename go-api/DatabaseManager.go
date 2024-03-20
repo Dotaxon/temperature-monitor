@@ -31,6 +31,19 @@ func initDatabaseManager() error {
 	return nil
 }
 
+// Updates the name of the sensor. The name inside sensor is the new name
+//
+// Returns the number of affected rows (-1 if an error occurred) and an error
+func updateSensor(sensor Sensor) (int64, error) {
+	if result, err := updateSensorNameStmt.Exec(sensor.Name, sensor.Id); err != nil {
+		return -1, err
+	} else if rows, err2 := result.RowsAffected(); err2 != nil {
+		return -1, err2
+	} else {
+		return rows, nil
+	}
+}
+
 func createSensorIfNotExists(sensor Sensor) error {
 	_, err := createSensorStmt.Exec(sensor.Id, sensor.Name)
 	if err != nil {

@@ -34,7 +34,7 @@ func main() {
 		Log.Printf("Sensor %s has temperature %f \n", sensor, temp)
 	}
 
-	generateEntries(60*1 + 1)
+	generateEntries(60*0 + 1)
 
 	err = initRouter()
 	if err != nil {
@@ -46,6 +46,7 @@ func main() {
 
 func initRouter() error {
 	var router *gin.Engine = gin.Default()
+	router.PATCH("/sensor/update", updateSensorName)
 	router.GET("/test/data", getTestData)
 	router.GET("/test/:id", getTestId)
 	router.POST("/test/data", addTest)
