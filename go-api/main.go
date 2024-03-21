@@ -51,6 +51,7 @@ func initRouter() error {
 
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:4200", "http://localhost", "http://RPI-Heizung:4200", "http://RPI-Heizung"},
+		AllowedMethods: []string{"GET", "POST", "PATCH"},
 		//AllowCredentials: true,
 		// Enable Debugging for testing, consider disabling in production
 		//Debug: true,
