@@ -17,7 +17,10 @@
 
 <div class="sensorSelection">
   <span *ngFor="let selectedSensor of selectedSensors">
-    <input type="checkbox" id="{{selectedSensor.name}}" [(ngModel)]="selectedSensor.selected" (change)="update()">
+    <input type="checkbox" id="{{selectedSensor.name}}" [(ngModel)]="selectedSensor.selected"> <!--(change)="update()"-->
     <label for="{{selectedSensor.name}}">{{selectedSensor.name}}</label>
   </span>
+</div>
+<div>
+  <button (click)="update()">Update</button>
 </div>
