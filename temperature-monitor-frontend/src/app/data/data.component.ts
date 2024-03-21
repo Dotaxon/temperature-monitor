@@ -32,7 +32,7 @@ export class DataComponent {
 
   ngOnInit(){
     //for future preselects filter the received sensors
-    this.sensorService.getSensors().subscribe(sensors => {
+    this.sensorService.getSensorsAsync().subscribe(sensors => {
       sensors.forEach(sensor => this.selectedSensors.push({name: sensor.name, selected:true}))
     });
     this.update();

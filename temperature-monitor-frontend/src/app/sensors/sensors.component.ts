@@ -32,7 +32,7 @@ export class SensorsComponent {
     }
 
     private getSensors(){
-      this.sensorService.getSensors().subscribe(sensors => {
+      this.sensorService.getSensorsAsync().subscribe(sensors => {
         this.sensors = sensors;
         console.log(sensors);
       });
