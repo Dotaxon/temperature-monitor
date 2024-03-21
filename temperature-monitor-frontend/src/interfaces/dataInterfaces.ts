@@ -24,7 +24,8 @@ export interface ChartDataCollection {
   type: string,
   name: string,
   showInLegend: boolean,
-  yValueFormatString: string, //##,###°C
+  xValueFormatString: string,
+  yValueFormatString: string, //##,#°C
   dataPoints: ChartDataPoint[]
 }
 

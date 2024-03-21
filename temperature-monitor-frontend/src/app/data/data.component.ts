@@ -8,6 +8,7 @@ import {FormsModule} from "@angular/forms";
 import {CollectionIntervalEnum} from "../../enums/Interval";
 import {ChartDataCollection, ChartDataPoint, DataCollection} from "../../interfaces/dataInterfaces";
 import {CollectionInterval} from "../CollectionInterval";
+import {DateTime, Duration} from "luxon";
 
 @Component({
   selector: 'app-data',
@@ -24,24 +25,34 @@ export class DataComponent {
 
   protected selectedSensors: SelectedSensors[] = []
   protected selectedInterval: CollectionInterval;
+  protected selectedStartTime : string;
+  protected selectedEndTime : string;
   protected chartOption = {}
 
   constructor(private dataService: DataService, private sensorService: SensorService) {
     this.selectedInterval = new CollectionInterval(CollectionIntervalEnum.Minute);
+
+    this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({minutes: 30})).startOf('minute')
+      .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
+    this.selectedEndTime = DateTime.now().plus(Duration.fromDurationLike({minutes: 30})).startOf('minute')
+      .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
   }
 
   ngOnInit(){
     //for future preselects filter the received sensors
     this.sensorService.getSensorsAsync().subscribe(sensors => {
-      sensors.forEach(sensor => this.selectedSensors.push({name: sensor.name, selected:true}))
+      sensors.forEach(sensor => this.selectedSensors.push({name: sensor.name, selected:false}))
     });
     this.update();
   }
 
   async update(){
+    let activeSensors = this.selectedSensors.filter(sensor => sensor.selected)
+
     this.chartOption = this.getNewChartOption(this.selectedInterval, this.dataService.mockDataCollections);
     //console.log(this.chartOption);
     console.log(this.selectedInterval.CurrentInterval)
+    console.log(this.selectedStartTime)
   }
 
   onIntervalChange(str: string){
@@ -51,11 +62,13 @@ export class DataComponent {
     if (interval !== undefined){
       this.selectedInterval.CurrentInterval = interval;
     }
+    this.update();
   }
 
   getNewChartOption(interval: CollectionInterval, data: DataCollection[]) {
 
-    let entryCollection = data.map<ChartDataCollection>(this.convertDataCollectionToChartDataCollection);
+    //in x/yValueFormat String you can specify the formater for the tooltip
+    let entryCollection = data.map<ChartDataCollection>( x => this.convertDataCollectionToChartDataCollection(x, interval));
 
     return {
       animationEnabled: false,
@@ -71,9 +84,6 @@ export class DataComponent {
       },
       toolTip: {
         shared: true,
-        // contentFormatter: function (e) {
-        //
-        // }
       },
       legend: {
         cursor: "pointer"
@@ -82,7 +92,7 @@ export class DataComponent {
     };
   }
 
-  convertDataCollectionToChartDataCollection(data : DataCollection) : ChartDataCollection {
+  convertDataCollectionToChartDataCollection(data : DataCollection, interval: CollectionInterval) : ChartDataCollection {
     let charDataPoints = data.data
       .map<ChartDataPoint>(dataPoint => {
         let chartDataPoint : ChartDataPoint = {x: dataPoint.time, y: dataPoint.temp};
@@ -93,7 +103,8 @@ export class DataComponent {
       type : "line",
       name : data.sensorID,
       showInLegend : true,
-      yValueFormatString : "##,###°C",
+      xValueFormatString : interval.convertIntervalToValueFormatString(),
+      yValueFormatString : "##.#°C",
       dataPoints : charDataPoints
     }
   }

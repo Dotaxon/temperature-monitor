@@ -5,6 +5,10 @@
     <select #intervalID (change)="onIntervalChange(intervalID.value)">
       <option *ngFor="let interval of CollectionInterval.AvailableValues">{{interval.key}}</option>
     </select>
+    <label for="startTime">Begin: </label>
+    <input id="startTime" type="datetime-local" [(ngModel)]="selectedStartTime">
+    <label for="endTime">Ende: </label>
+    <input id="endTime" type="datetime-local" [(ngModel)]="selectedEndTime">
   </span>
 </div>
 <div>
