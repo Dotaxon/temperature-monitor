@@ -39,7 +39,7 @@ export class DataComponent {
   constructor(private dataService: DataService, private sensorService: SensorService) {
     this.selectedInterval = new CollectionInterval(CollectionIntervalEnum.Minute);
 
-    this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({minutes: 60})).startOf('minute')
+    this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({minutes: 30})).startOf('minute')
       .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
     this.selectedEndTime = DateTime.now().startOf('minute')
       .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
@@ -134,9 +134,15 @@ export class DataComponent {
         return chartDataPoint;
       })
 
+    let sensorName = this.sensorService.getSensorNameNow(data.sensorID);
+
+    if (sensorName === undefined) {
+      sensorName = data.sensorID;
+    }
+
     return {
       type : "line",
-      name : data.sensorID,
+      name : sensorName,
       showInLegend : true,
       xValueFormatString : interval.convertIntervalToValueFormatStringToolTip(),
       yValueFormatString : "##.#°C",
