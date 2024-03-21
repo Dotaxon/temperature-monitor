@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	cors "github.com/rs/cors/wrapper/gin"
 	"log"
 )
 
@@ -35,7 +36,7 @@ func main() {
 		Log.Printf("Sensor %s has temperature %f \n", sensor, temp)
 	}
 
-	generateEntries(60*1 + 1)
+	//generateEntries(60*1 + 1)
 
 	err = initRouter()
 	if err != nil {
@@ -47,6 +48,15 @@ func main() {
 
 func initRouter() error {
 	var router *gin.Engine = gin.Default()
+
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:4200", "http://localhost", "http://RPI-Heizung:4200", "http://RPI-Heizung"},
+		//AllowCredentials: true,
+		// Enable Debugging for testing, consider disabling in production
+		//Debug: true,
+	})
+
+	router.Use(c)
 	router.PATCH("/sensor/update", updateSensorName)
 	router.GET("/sensor/:id", getSensor)
 	router.GET("/sensors", getSensors)

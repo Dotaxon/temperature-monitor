@@ -5,6 +5,8 @@ go 1.22
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/mattn/go-sqlite3 v1.14.22
+	github.com/rs/cors v1.10.1
+	github.com/rs/cors/wrapper/gin v0.0.0-20240228164225-8d33ca4794ea
 	github.com/yryz/ds18b20 v0.0.0-20200527154408-4a8f84bb82d4
 )
 
