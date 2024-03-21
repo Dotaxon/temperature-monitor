@@ -138,7 +138,7 @@ export class DataComponent {
       type : "line",
       name : data.sensorID,
       showInLegend : true,
-      xValueFormatString : interval.convertIntervalToValueFormatString(),
+      xValueFormatString : interval.convertIntervalToValueFormatStringToolTip(),
       yValueFormatString : "##.#°C",
       dataPoints : charDataPoints
     }

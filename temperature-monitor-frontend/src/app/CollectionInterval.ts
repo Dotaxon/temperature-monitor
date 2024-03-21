@@ -30,6 +30,20 @@ export class CollectionInterval {
     }
   }
 
+  public convertIntervalToValueFormatStringToolTip() : string {
+//https://canvasjs.com/docs/charts/chart-options/axisx/valueformatstring/
+    switch (this.currentInterval) {
+      case CollectionIntervalEnum.Minute:
+        return "HH:mm";
+      case CollectionIntervalEnum.Hour:
+        return "D.M HH:mm";
+      case CollectionIntervalEnum.Day:
+        return "D.M.YYYY";
+      case CollectionIntervalEnum.Week:
+        return "D.M.YYYY"
+    }
+  }
+
   public convertIntervalToIntervalTypeString() : string {
 //https://canvasjs.com/docs/charts/chart-options/axisx/intervaltype/
     switch (this.currentInterval) {
