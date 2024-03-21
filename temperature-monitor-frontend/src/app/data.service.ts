@@ -22,8 +22,8 @@ export class DataService {
     console.log(this.mockDataCollection);
   }
 
-  public getDataEntries(sensorID: string, interval: CollectionIntervalEnum) {
-
+  public getDataEntries(sensorID: string, startTime: DateTime, endTime: DateTime, interval: CollectionIntervalEnum) {
+    //this.http.post
   }
 
 

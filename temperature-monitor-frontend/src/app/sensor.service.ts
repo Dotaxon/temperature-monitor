@@ -66,8 +66,6 @@ export class SensorService {
     return this.knownSensors.find(sensor => sensor.id === sensorID)?.name
   }
 
-
-
   private generateMockSensors(numberOfSensors: number): void{
     for (let i = 0; i < numberOfSensors; i++) {
       this.mockSensors.push({id: crypto.randomUUID(), name: "name"});

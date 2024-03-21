@@ -61,7 +61,7 @@ func initRouter() error {
 	router.PATCH("/sensor/update", updateSensorName)
 	router.GET("/sensor/:id", getSensor)
 	router.GET("/sensors", getSensors)
-	router.GET("/data", getDataEntries)
+	router.POST("/data", getDataEntries)
 
 	router.GET("/test/data", getTestData)
 	router.GET("/test/:id", getTestId)
