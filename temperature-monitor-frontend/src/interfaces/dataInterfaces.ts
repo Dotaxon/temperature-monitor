@@ -1,17 +1,17 @@
 import {CollectionIntervalEnum} from "../enums/Interval";
 
 export interface DataPoint {
-  time : Date;
+  time : Date; //UTC
   temp : number
 }
 
 export interface SimpleDataPoint{
-  time : number,
+  time : number, //UTC
   temp : number
 }
 
 export interface ChartDataPoint {
-  x : Date,
+  x : Date, //local
   y : number
 }
 
@@ -30,13 +30,13 @@ export interface ChartDataCollection {
 }
 
 export interface GetDataEntriesRequestBody {
-  startTime: number,
-  endTime: number,
+  startTime: number, //UTC
+  endTime: number, //UTC
   sensorID: string,
   interval: CollectionIntervalEnum
 }
 
 export interface GetDataEntriesRequestResponse {
   sensorID: string,
-  data: SimpleDataPoint
+  data: SimpleDataPoint[]
 }

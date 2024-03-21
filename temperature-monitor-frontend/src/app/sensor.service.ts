@@ -63,7 +63,11 @@ export class SensorService {
   }
 
   public getSensorNameNow(sensorID: string): string | undefined {
-    return this.knownSensors.find(sensor => sensor.id === sensorID)?.name
+    return this.knownSensors.find(sensor => sensor.id === sensorID)?.name;
+  }
+
+  public getSensorIDNow(sensorName: string): string | undefined {
+    return this.knownSensors.find(sensor => sensor.name === sensorName)?.id;
   }
 
   private generateMockSensors(numberOfSensors: number): void{

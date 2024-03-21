@@ -30,8 +30,8 @@ export class DataService {
 
   public getDataEntries(sensorID: string, startTime: DateTime, endTime: DateTime, interval: CollectionIntervalEnum) {
     let requestBody : GetDataEntriesRequestBody = {
-      startTime: startTime.toUnixInteger(),
-      endTime: endTime.toUnixInteger(),
+      startTime: startTime.toUTC().toUnixInteger(),
+      endTime: endTime.toUTC().toUnixInteger(),
       interval: interval,
       sensorID: sensorID
     }

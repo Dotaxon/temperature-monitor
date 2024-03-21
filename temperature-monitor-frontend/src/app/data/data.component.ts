@@ -6,9 +6,16 @@ import {SelectedSensors, Sensor} from "../../interfaces/sensor";
 import {KeyValue, NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {CollectionIntervalEnum} from "../../enums/Interval";
-import {ChartDataCollection, ChartDataPoint, DataCollection} from "../../interfaces/dataInterfaces";
+import {
+  ChartDataCollection,
+  ChartDataPoint,
+  DataCollection,
+  DataPoint,
+  SimpleDataPoint
+} from "../../interfaces/dataInterfaces";
 import {CollectionInterval} from "../CollectionInterval";
 import {DateTime, Duration} from "luxon";
+import {firstValueFrom, from, interval as rxjsInterval, scheduled} from 'rxjs';
 
 @Component({
   selector: 'app-data',
@@ -32,9 +39,9 @@ export class DataComponent {
   constructor(private dataService: DataService, private sensorService: SensorService) {
     this.selectedInterval = new CollectionInterval(CollectionIntervalEnum.Minute);
 
-    this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({minutes: 30})).startOf('minute')
+    this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({minutes: 60})).startOf('minute')
       .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
-    this.selectedEndTime = DateTime.now().plus(Duration.fromDurationLike({minutes: 30})).startOf('minute')
+    this.selectedEndTime = DateTime.now().startOf('minute')
       .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
   }
 
@@ -47,12 +54,42 @@ export class DataComponent {
   }
 
   async update(){
-    let activeSensors = this.selectedSensors.filter(sensor => sensor.selected)
+    console.log("> update ======================================")
 
-    this.chartOption = this.getNewChartOption(this.selectedInterval, this.dataService.mockDataCollections);
-    //console.log(this.chartOption);
-    console.log(this.selectedInterval.CurrentInterval)
-    console.log(this.selectedStartTime)
+    let activeSensors = this.selectedSensors.filter(sensor => sensor.selected);
+    let dataCollections : DataCollection[] = [];
+
+    let startTime =DateTime.fromISO(this.selectedStartTime).toUTC();
+    let endTime = DateTime.fromISO(this.selectedEndTime).toUTC();
+
+    for (const activeSensor of activeSensors) {
+
+      let sensorID = this.sensorService.getSensorIDNow(activeSensor.name);
+      if (sensorID === undefined) {
+        continue;
+      }
+
+      // console.log(`Request dataCollection for ${activeSensor.name}`);
+      let response = await firstValueFrom(
+        this.dataService.getDataEntries(sensorID, startTime, endTime, this.selectedInterval.CurrentInterval));
+
+      // console.log(response);
+
+      let dataPoints = response.data.map(this.convertSimpleDataPointToDatPoint);
+      dataCollections.push({sensorID: response.sensorID, data: dataPoints});
+
+      // console.log(`Got dataCollection for ${activeSensor.name}`);
+    }
+
+    // console.log("Here");
+    // console.log(dataCollections);
+    // console.log(this.dataService.mockDataCollections);
+
+    this.chartOption = this.getNewChartOption(this.selectedInterval, dataCollections);
+    console.log(this.chartOption);
+    // console.log(this.selectedInterval.CurrentInterval);
+    // console.log(this.selectedStartTime);
+    console.log("< update ======================================")
   }
 
   onIntervalChange(str: string){
@@ -109,6 +146,12 @@ export class DataComponent {
     }
   }
 
+  convertSimpleDataPointToDatPoint(simple: SimpleDataPoint): DataPoint {
+    return {
+      temp : simple.temp,
+      time : DateTime.fromSeconds(simple.time, {zone: 'UTC'}).toJSDate()
+    }
+  }
 
 
 
