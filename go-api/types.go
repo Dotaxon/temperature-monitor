@@ -64,7 +64,7 @@ type DataCollection struct {
 
 // GetDataEntriesBody Body of GET request to get data from StartTime to EndTime in specified Interval from SensorID
 //
-// StartTime and EndTime are in UNIX format and are not reduced to their Interval like getToHourReducedTimeUTC would do
+// StartTime and EndTime are in UNIX UTC format and are not reduced to their Interval like getToHourReducedTimeUTC would do
 type GetDataEntriesBody struct {
 	StartTime int64    `json:"startTime"`
 	EndTime   int64    `json:"endTime"`

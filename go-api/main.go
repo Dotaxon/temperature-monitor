@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-const BindingAddr = "localhost:3000"
+const BindingAddr = "RPI-Heizung.fritz.box:3000"
 
 var Log *log.Logger
 

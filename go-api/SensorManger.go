@@ -40,7 +40,7 @@ func createMeasurement() {
 	Log.Println("Tick")
 
 	sensorsMutex.RLock()
-	sensorList := make([]string, 0, len(sensors))
+	sensorList := make([]string, len(sensors))
 	copy(sensorList, sensors)
 	sensorsMutex.RUnlock()
 
@@ -72,7 +72,7 @@ func getRefreshedSensorIDs() []string {
 	sensorsMutex.RLock()
 	defer sensorsMutex.RUnlock()
 
-	sensorList := make([]string, 0, len(sensors))
+	sensorList := make([]string, len(sensors))
 	copy(sensorList, sensors)
 
 	return sensorList
