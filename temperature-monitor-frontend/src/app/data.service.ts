@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {DataPoint, dataCollection} from "../interfaces/dataInterfaces";
+import {DataPoint, DataCollection} from "../interfaces/dataInterfaces";
 import {DateTime, Duration, DurationLike} from "luxon";
 
 @Injectable({
@@ -13,31 +13,56 @@ export class DataService {
 
   halfhour: DurationLike = { minutes: 30 };
 
-  mockHourCollection : dataCollection[] = [];
+  mockDataCollection : DataCollection[] = [];
 
   constructor() {
-    this.generateMockHourCollections(24);
-    console.log(this.mockHourCollection);
+    this.generateMockHourCollections(2);
+    console.log(this.mockDataCollection);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   generateMockHourCollections(numberOfHours: number) : void {
     let date = new Date(2023, 1, 1, 0, 30);
     for (let i = 0; i < numberOfHours; i++) {
-      this.mockHourCollection.push(this.generateHour(DateTime.fromJSDate(date).plus(i * DataService.hourMillis)));
+      this.mockDataCollection.push(this.generateHour(DateTime.fromJSDate(date).plus(0 * i * DataService.hourMillis)));
     }
   }
 
-  generateHour(start: DateTime): dataCollection{
+  generateHour(start: DateTime): DataCollection{
 
     let data: DataPoint[] = [];
-    for (let i = 0; i < 60; i++) {
-      data.push({temp : Math.random(), time: start.plus(i * DataService.minuteMillis).toJSDate() })
+    for (let i = 0; i < 50; i++) {
+      data.push({temp : Math.random() * 30, time: start.plus(i * DataService.minuteMillis).toJSDate() })
     }
 
     let avg : number = data.map(x => x.temp)
       .reduce((previousValue, currentValue) => currentValue+previousValue, 0) / data.length;
 
-    return {time: new Date(start.plus(this.halfhour).toJSDate()), average: avg, data: data};
+    return {sensorID: "abc", data: data};
   }
 
 

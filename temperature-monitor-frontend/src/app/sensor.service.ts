@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Sensor} from "../interfaces/sensor";
-import {of} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {catchError, of, retry, throwError} from "rxjs";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {BackendURL} from "./app.config";
 
 @Injectable({
   providedIn: 'root'
@@ -21,16 +22,40 @@ export class SensorService {
     }
   }
 
-  public saveSensors(sensors: Sensor[]){
-    this.mockSensors = sensors;
+  private errorHandler(error : HttpErrorResponse){
+    if (error.status === 0){
+      //Client side or network error no status code
+      console.error('An client side or network error ocuured: ', error.error)
+    }
+    else {
+      console.error(`Backend returned code ${error.status}, body was: `, error.error)
+    }
+
+    return throwError( () => new Error('Something bad happened; please try again later.'))
+  }
+
+  // public saveSensors(sensors: Sensor[]){
+  //   this.mockSensors = sensors;
+  // }
+
+  public saveSensor(sensor: Sensor){
+    this.http.patch(BackendURL + "/sensor/update", sensor)
+      .pipe(
+        retry(3),
+        catchError(this.errorHandler)
+      ).subscribe();
   }
 
   public getSensors(){
-    return this.http.get<Sensor[]>("http://localhost:3000/sensors/")
+    return this.http.get<Sensor[]>(BackendURL + "/sensors")
+      .pipe(
+        retry(3),
+        catchError(this.errorHandler)
+      );
     // return of(this.mockSensors);
   }
 
-  public getSensor(id : string){
-    return of(this.mockSensors.find((sensor, index, obj) => sensor.id === id));
-  }
+  // public getSensor(id : string){
+  //   return of(this.mockSensors.find((sensor, index, obj) => sensor.id === id));
+  // }
 }

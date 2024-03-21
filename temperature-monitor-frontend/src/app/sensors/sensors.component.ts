@@ -26,12 +26,13 @@ export class SensorsComponent {
     }
 
     onSave(){
-
+      this.sensors.forEach((sensor) => {
+        this.sensorService.saveSensor(sensor);
+      });
     }
 
     private getSensors(){
       this.sensorService.getSensors().subscribe(sensors => {
-        console.log("Here")
         this.sensors = sensors;
         console.log(sensors);
       });

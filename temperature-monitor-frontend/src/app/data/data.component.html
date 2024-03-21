@@ -1,7 +1,25 @@
 <h2></h2>
 <div>
-
+  <span>
+    Interval:
+<!--    <select>-->
+<!--      <option *ngFor="let interval of selectedInterval.AvailableValues" [(ngModel)]="selectedInterval.CurrentInterval" >{{interval.value}}</option>-->
+<!--    </select>-->
+    <select #intervalID (change)="onIntervalChange(intervalID.value)">
+      <option>Minute</option>
+      <option>Stunde</option>
+      <option>Tag</option>
+      <option>Woche</option>
+    </select>
+  </span>
 </div>
 <div>
   <canvasjs-chart class="chart" [options]="chartOption"></canvasjs-chart>
+</div>
+
+<div class="sensorSelection">
+  <span *ngFor="let selectedSensor of selectedSensors">
+    <input type="checkbox" id="{{selectedSensor.name}}" [(ngModel)]="selectedSensor.selected" (change)="update()">
+    <label for="{{selectedSensor.name}}">{{selectedSensor.name}}</label>
+  </span>
 </div>

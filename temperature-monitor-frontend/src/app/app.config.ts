@@ -7,3 +7,6 @@ import {HttpClientModule} from "@angular/common/http";
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), importProvidersFrom(HttpClientModule)]
 };
+
+//export const BackendURL: string = "http://localhost:3000"
+export const BackendURL: string = "http://RPI-Heizung:3000"
