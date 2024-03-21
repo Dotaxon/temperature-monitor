@@ -2,14 +2,8 @@
 <div>
   <span>
     Interval:
-<!--    <select>-->
-<!--      <option *ngFor="let interval of selectedInterval.AvailableValues" [(ngModel)]="selectedInterval.CurrentInterval" >{{interval.value}}</option>-->
-<!--    </select>-->
     <select #intervalID (change)="onIntervalChange(intervalID.value)">
-      <option>Minute</option>
-      <option>Stunde</option>
-      <option>Tag</option>
-      <option>Woche</option>
+      <option *ngFor="let interval of CollectionInterval.AvailableValues">{{interval.key}}</option>
     </select>
   </span>
 </div>

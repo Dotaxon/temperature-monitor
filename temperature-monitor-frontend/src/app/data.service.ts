@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {DataPoint, DataCollection} from "../interfaces/dataInterfaces";
 import {DateTime, Duration, DurationLike} from "luxon";
+import {CollectionIntervalEnum} from "../enums/Interval";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +17,14 @@ export class DataService {
 
   mockDataCollection : DataCollection[] = [];
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.generateMockHourCollections(2);
     console.log(this.mockDataCollection);
   }
 
+  public getDataEntries(sensorID: string, interval: CollectionIntervalEnum) {
 
+  }
 
 
 

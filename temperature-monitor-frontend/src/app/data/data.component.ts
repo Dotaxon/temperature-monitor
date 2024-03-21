@@ -38,7 +38,7 @@ export class DataComponent {
     this.update();
   }
 
-  update(){
+  async update(){
     this.chartOption = this.getNewChartOption(this.selectedInterval, this.dataService.mockDataCollection);
     //console.log(this.chartOption);
     console.log(this.selectedInterval.CurrentInterval)
@@ -97,26 +97,6 @@ export class DataComponent {
       dataPoints : charDataPoints
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -188,4 +168,5 @@ export class DataComponent {
         ]
       }]
   }
+  protected readonly CollectionInterval = CollectionInterval;
 }

@@ -1,5 +1,12 @@
+import {CollectionIntervalEnum} from "../enums/Interval";
+
 export interface DataPoint {
   time : Date;
+  temp : number
+}
+
+export interface SimpleDataPoint{
+  time : number,
   temp : number
 }
 
@@ -21,20 +28,14 @@ export interface ChartDataCollection {
   dataPoints: ChartDataPoint[]
 }
 
-// /**
-//  * data should only contain 24 elements
-//  */
-// export interface dayCollection {
-//   day : Date;
-//   average : number;
-//   data : DataPoint[];
-// }
-//
-// /**
-//  * data should only contain 7 elements
-//  */
-// export interface weekCollection {
-//   startDay : Date;
-//   average : number;
-//   data : DataPoint[];
-// }
+export interface GetDataEntriesRequestBody {
+  startTime: number,
+  endTime: number,
+  sensorID: string,
+  interval: CollectionIntervalEnum
+}
+
+export interface GetDataEntriesRequestResponse {
+  sensorID: string,
+  data: SimpleDataPoint
+}
