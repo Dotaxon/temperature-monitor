@@ -50,7 +50,6 @@ export class DataComponent {
     this.sensorService.getSensorsAsync().subscribe(sensors => {
       sensors.forEach(sensor => this.selectedSensors.push({name: sensor.name, selected:false}))
     });
-    this.update();
   }
 
   async update(){
@@ -99,7 +98,6 @@ export class DataComponent {
     if (interval !== undefined){
       this.selectedInterval.CurrentInterval = interval;
     }
-    this.update();
   }
 
   getNewChartOption(interval: CollectionInterval, data: DataCollection[]) {
