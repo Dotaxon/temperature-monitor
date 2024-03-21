@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
 import {DataService} from "../data.service";
 import {SensorService} from "../sensor.service";
-import {SelectedSensors} from "../../interfaces/sensor";
+import {SelectedSensors, Sensor} from "../../interfaces/sensor";
 import {KeyValue, NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {CollectionIntervalEnum} from "../../enums/Interval";
@@ -39,7 +39,7 @@ export class DataComponent {
   }
 
   async update(){
-    this.chartOption = this.getNewChartOption(this.selectedInterval, this.dataService.mockDataCollection);
+    this.chartOption = this.getNewChartOption(this.selectedInterval, this.dataService.mockDataCollections);
     //console.log(this.chartOption);
     console.log(this.selectedInterval.CurrentInterval)
   }

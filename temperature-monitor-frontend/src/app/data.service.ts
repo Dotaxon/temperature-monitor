@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
-import {DataPoint, DataCollection} from "../interfaces/dataInterfaces";
+import {
+  DataPoint,
+  DataCollection,
+  GetDataEntriesRequestBody,
+  GetDataEntriesRequestResponse
+} from "../interfaces/dataInterfaces";
 import {DateTime, Duration, DurationLike} from "luxon";
 import {CollectionIntervalEnum} from "../enums/Interval";
 import {HttpClient} from "@angular/common/http";
+import {BackendURL} from "./app.config";
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +21,22 @@ export class DataService {
 
   halfhour: DurationLike = { minutes: 30 };
 
-  mockDataCollection : DataCollection[] = [];
+  mockDataCollections : DataCollection[] = [];
 
   constructor(private http: HttpClient) {
     this.generateMockHourCollections(2);
-    console.log(this.mockDataCollection);
+    console.log(this.mockDataCollections);
   }
 
   public getDataEntries(sensorID: string, startTime: DateTime, endTime: DateTime, interval: CollectionIntervalEnum) {
-    //this.http.post
+    let requestBody : GetDataEntriesRequestBody = {
+      startTime: startTime.toUnixInteger(),
+      endTime: endTime.toUnixInteger(),
+      interval: interval,
+      sensorID: sensorID
+    }
+
+    return this.http.post<GetDataEntriesRequestResponse>(BackendURL + "/data", requestBody)
   }
 
 
@@ -52,7 +65,7 @@ export class DataService {
   generateMockHourCollections(numberOfHours: number) : void {
     let date = new Date(2023, 1, 1, 0, 30);
     for (let i = 0; i < numberOfHours; i++) {
-      this.mockDataCollection.push(this.generateHour(DateTime.fromJSDate(date).plus(0 * i * DataService.hourMillis)));
+      this.mockDataCollections.push(this.generateHour(DateTime.fromJSDate(date).plus(0 * i * DataService.hourMillis)));
     }
   }
 
