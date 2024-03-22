@@ -11,23 +11,23 @@ func updateSensorName(context *gin.Context) {
 	var sensor Sensor
 	if err := context.BindJSON(&sensor); err != nil {
 		Log.Println(err)
-		context.IndentedJSON(http.StatusBadRequest, err)
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	if result, err := updateSensor(sensor); err != nil {
 		Log.Println(err)
-		context.IndentedJSON(http.StatusInternalServerError, err)
+		context.JSON(http.StatusInternalServerError, err)
 		return
 	} else if result == 0 {
 		err := fmt.Errorf("did not find matching Sensor")
 		Log.Println(err)
-		context.IndentedJSON(http.StatusNotFound, err)
+		context.JSON(http.StatusNotFound, err)
 		return
 	}
 
 	Log.Printf("Set Sensor name of %s (ID) to name: %s \n", sensor.Id, sensor.Name)
-	context.IndentedJSON(http.StatusCreated, sensor)
+	context.JSON(http.StatusCreated, sensor)
 }
 
 func getSensor(context *gin.Context) {
@@ -35,19 +35,19 @@ func getSensor(context *gin.Context) {
 
 	sensor, err := GetSensorEntry(id)
 	if err != nil {
-		context.IndentedJSON(http.StatusBadRequest, err)
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
-	context.IndentedJSON(http.StatusOK, sensor)
+	context.JSON(http.StatusOK, sensor)
 }
 
 func getSensors(context *gin.Context) {
 	sensors, err := GetSensorEntries()
 	if err != nil {
-		context.IndentedJSON(http.StatusBadRequest, err)
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
-	context.IndentedJSON(http.StatusOK, sensors)
+	context.JSON(http.StatusOK, sensors)
 }
 
 func getDataEntries(context *gin.Context) {
@@ -56,39 +56,39 @@ func getDataEntries(context *gin.Context) {
 
 	if err := context.BindJSON(&body); err != nil {
 		Log.Println(err)
-		context.IndentedJSON(http.StatusBadRequest, err)
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	if !body.Interval.IsValid() {
 		err := fmt.Errorf("%d is not an valid interval", body.Interval)
 		Log.Println(err)
-		context.IndentedJSON(http.StatusBadRequest, err)
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	if !ExitsSensor(body.SensorID) {
 		err := fmt.Errorf("did not find Sensor with ID: %s ", body.SensorID)
 		Log.Println(err)
-		context.IndentedJSON(http.StatusBadRequest, err)
+		context.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	if body.StartTime > body.EndTime {
 		err := fmt.Errorf("startTime is bigger than endTime")
 		Log.Println(err)
-		context.IndentedJSON(http.StatusBadRequest, err)
+		context.JSON(http.StatusBadRequest, err)
 	}
 
 	dataPoints, err := GetEntryCollection(body.StartTime, body.EndTime, body.SensorID, body.Interval)
 
 	if err != nil {
 		Log.Println(err)
-		context.IndentedJSON(http.StatusInternalServerError, err)
+		context.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	context.IndentedJSON(http.StatusOK, GetDataEntriesResponse{
+	context.JSON(http.StatusOK, GetDataEntriesResponse{
 		SensorID: body.SensorID,
 		Data:     dataPoints,
 	})

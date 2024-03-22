@@ -6,9 +6,10 @@ import (
 	"log"
 )
 
-const BindingAddr = "RPI-Heizung.fritz.box:3000"
-const CertFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung_API.crt"
-const KeyFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung_API.key"
+// const BindingAddr = "RPI-Heizung.fritz.box:3000"
+const BindingAddr = "localhost:3000"
+const CertFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung.fritz.box.crt"
+const KeyFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung.fritz.box.key"
 
 //const CertFile = "/etc/ssl/certs/RPI-Heizung.fritz.box.chained.crt"
 //const KeyFile = "/etc/ssl/private/RPI-Heizung.fritz.box.key"
