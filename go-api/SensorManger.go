@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/rkusa/gm/math32"
 	"github.com/yryz/ds18b20"
+	"strings"
 	"sync"
 	Time "time"
 )
@@ -61,9 +62,18 @@ func createMeasurement() {
 }
 
 func refreshSensors() {
+	newSensorCandidates, _ := ds18b20.Sensors()
+	newSensors := make([]string, 0, len(newSensorCandidates))
+
+	for _, sensorCandidate := range newSensorCandidates {
+		if strings.HasPrefix(sensorCandidate, "28") {
+			newSensors = append(newSensors, sensorCandidate)
+		}
+	}
+
 	sensorsMutex.Lock()
 	defer sensorsMutex.Unlock()
-	sensors, _ = ds18b20.Sensors()
+	sensors = newSensors
 }
 
 func getRefreshedSensorIDs() []string {
