@@ -91,10 +91,7 @@ func getTemp(sensorID string) (float32, error) {
 }
 
 func getTempsFrom(sensors []Sensor) ([]SensorWithTemp, error) {
-	list := make([]SensorWithTemp, len(sensors))
-
-	sensorsMutex.RLock()
-	defer sensorsMutex.RUnlock()
+	list := make([]SensorWithTemp, 0, len(sensors))
 
 	for _, sensor := range sensors {
 		temp, err := getSensorTemp(sensor)

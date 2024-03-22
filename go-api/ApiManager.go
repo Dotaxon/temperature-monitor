@@ -93,3 +93,24 @@ func getDataEntries(context *gin.Context) {
 		Data:     dataPoints,
 	})
 }
+
+func getSensorsWithTemp(context *gin.Context) {
+	var sensors []Sensor
+
+	if err := context.BindJSON(&sensors); err != nil {
+		Log.Println(err)
+		context.JSON(http.StatusBadRequest, err)
+		return
+	}
+
+	var sensorsT []SensorWithTemp
+	var err error
+	sensorsT, err = getTempsFrom(sensors)
+	if err != nil {
+		Log.Println(err)
+		context.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	context.JSON(http.StatusOK, sensorsT)
+}
