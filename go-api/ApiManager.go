@@ -80,13 +80,6 @@ func getDataEntries(context *gin.Context) {
 		context.IndentedJSON(http.StatusBadRequest, err)
 	}
 
-	//var dataPoints []SimpleDataPoint
-	//var err error
-	//switch body.Interval {
-	//case Minute:
-	//	dataPoints, err = GetEntryCollection(body.StartTime, body.EndTime, body.SensorID, )
-	//}
-
 	dataPoints, err := GetEntryCollection(body.StartTime, body.EndTime, body.SensorID, body.Interval)
 
 	if err != nil {

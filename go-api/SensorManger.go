@@ -79,13 +79,13 @@ func getRefreshedSensorIDs() []string {
 }
 
 func getSensorTemp(sensor Sensor) (float32, error) {
-	return getTemp(sensor.Name)
+	return getTemp(sensor.Id)
 }
 
-func getTemp(sensor string) (float32, error) {
-	temp, err := ds18b20.Temperature(sensor)
+func getTemp(sensorID string) (float32, error) {
+	temp, err := ds18b20.Temperature(sensorID)
 	if err != nil {
-		return math32.NaN(), fmt.Errorf("could not read %s", sensor)
+		return math32.NaN(), fmt.Errorf("could not read %s", sensorID)
 	}
 	return float32(temp), nil
 }
