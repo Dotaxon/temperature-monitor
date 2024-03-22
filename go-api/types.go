@@ -42,8 +42,8 @@ type Sensor struct {
 }
 
 type SensorWithTemp struct {
-	Sensor
-	Temp float32 `json:"temp"`
+	Sensor Sensor  `json:"sensor"`
+	Temp   float32 `json:"temp"`
 }
 
 type DataPoint struct {
