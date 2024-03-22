@@ -9,4 +9,4 @@ export const appConfig: ApplicationConfig = {
 };
 
 //export const BackendURL: string = "http://localhost:3000"
-export const BackendURL: string = "http://RPI-Heizung:3000"
+export const BackendURL: string = "https://RPI-Heizung.fritz.box:3000"
