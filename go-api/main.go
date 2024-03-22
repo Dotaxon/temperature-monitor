@@ -6,7 +6,12 @@ import (
 	"log"
 )
 
-const BindingAddr = "RPI-Heizung.fritz.box:3000"
+const BindingAddr = "localhost:3000"
+const CertFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung_API.crt"
+const KeyFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung_API.key"
+
+//const CertFile = "/home/vincent/RPI-Heizung.fritz.box.crt"
+//const KeyFile = "/home/vincent/RPI-Heizung.fritz.box.key"
 
 var Log *log.Logger
 
@@ -50,9 +55,12 @@ func initRouter() error {
 	var router *gin.Engine = gin.Default()
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:4200", "http://localhost", "http://RPI-Heizung:4200", "http://RPI-Heizung"},
-		AllowedMethods: []string{"GET", "POST", "PATCH"},
-		//AllowCredentials: true,
+		AllowedOrigins: []string{"http://localhost:4200", "http://localhost", "http://RPI-Heizung:4200",
+			"http://RPI-Heizung", "http://RPI-Heizung.fritz.box", "https://localhost:4200", "https://localhost", "https://RPI-Heizung:4200",
+			"https://RPI-Heizung", "https://RPI-Heizung.fritz.box"},
+		AllowedMethods:      []string{"GET", "POST", "PATCH"},
+		AllowPrivateNetwork: false,
+		AllowCredentials:    true,
 		// Enable Debugging for testing, consider disabling in production
 		//Debug: true,
 	})
@@ -67,5 +75,6 @@ func initRouter() error {
 	router.GET("/test/:id", getTestId)
 	router.POST("/test/data", addTest)
 	router.POST("/test/sensor", addTestSensor)
+	//return router.RunTLS(BindingAddr, CertFile, KeyFile)
 	return router.Run(BindingAddr)
 }
