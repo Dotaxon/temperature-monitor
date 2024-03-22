@@ -71,7 +71,7 @@ func initRouter() error {
 	router.GET("/sensor/:id", getSensor)
 	router.GET("/sensors", getSensors)
 	router.POST("/data", getDataEntries)
-	router.POST("/senors/temps", getSensorsWithTemp)
+	router.POST("/sensors/temps", getSensorsWithTemp)
 
 	router.GET("/test/data", getTestData)
 	router.GET("/test/:id", getTestId)
