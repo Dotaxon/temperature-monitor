@@ -5,6 +5,7 @@
       <span class="id">ID: {{sensor.id}}</span>
       <label for="sensor-name">Name: </label>
       <input id="sensor-name" [(ngModel)]="sensor.name" placeholder="Sensorname">
+      <span> Temperatur: {{getTemp(sensor.id)}} °C</span>
     </li>
   </ul>
   <button (click)="onSave()">Speichern</button>

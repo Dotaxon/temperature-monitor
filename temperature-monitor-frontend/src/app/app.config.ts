@@ -8,5 +8,5 @@ export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), importProvidersFrom(HttpClientModule)]
 };
 
-//export const BackendURL: string = "http://localhost:3000"
+//export const BackendURL: string = "https://localhost:3000"
 export const BackendURL: string = "https://RPI-Heizung.fritz.box:3000"

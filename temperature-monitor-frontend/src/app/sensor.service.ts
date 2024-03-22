@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Sensor} from "../interfaces/sensor";
+import {Sensor, SensorWithTemp} from "../interfaces/sensor";
 import {catchError, Observable, of, retry, throwError} from "rxjs";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {BackendURL} from "./app.config";
@@ -12,7 +12,7 @@ export class SensorService {
 
   private mockSensors: Sensor[] = [];
 
-  private knownSensors: Sensor[] = []
+  private knownSensors: SensorWithTemp[] = []
 
   constructor(private http: HttpClient) {
     //this.generateMockSensors(15);
@@ -25,8 +25,13 @@ export class SensorService {
 
   private refreshKnownSensors(){
     this.getSensorsAsync().subscribe( sensors => {
-      console.log("Refreshed KnownSensors!")
-      this.knownSensors = sensors;
+      console.log("Received Sensors!");
+
+      this.getSensorsWithTemps(sensors).subscribe(sensorsWithTemps => {
+        console.log("Received Sensors with Temp!")
+        this.knownSensors = sensorsWithTemps;
+      })
+
     })
   }
 
@@ -58,16 +63,20 @@ export class SensorService {
       );
   }
 
-  public getSensorsNow(): Sensor[]{
-    return this.knownSensors;
+  public getSensorsWithTemps(sensors : Sensor[]) {
+    return this.http.post<SensorWithTemp[]>(BackendURL + "/sensors/temps", sensors);
   }
 
   public getSensorNameNow(sensorID: string): string | undefined {
-    return this.knownSensors.find(sensor => sensor.id === sensorID)?.name;
+    return this.knownSensors.find(sensor => sensor.sensor.id === sensorID)?.sensor?.name;
   }
 
   public getSensorIDNow(sensorName: string): string | undefined {
-    return this.knownSensors.find(sensor => sensor.name === sensorName)?.id;
+    return this.knownSensors.find(sensor => sensor.sensor.name === sensorName)?.sensor?.id;
+  }
+
+  public getSensorTempNow(sensorID: string): number | undefined {
+    return this.knownSensors.find(sensor => sensor.sensor.id === sensorID)?.temp;
   }
 
   private generateMockSensors(numberOfSensors: number): void{

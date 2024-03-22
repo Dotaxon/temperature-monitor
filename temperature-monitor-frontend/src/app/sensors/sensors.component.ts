@@ -38,4 +38,8 @@ export class SensorsComponent {
       });
     }
 
+    protected getTemp(sensorID: string){
+      return this.sensorService.getSensorTempNow(sensorID);
+    }
+
 }
