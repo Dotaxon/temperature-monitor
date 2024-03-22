@@ -75,6 +75,6 @@ func initRouter() error {
 	router.GET("/test/:id", getTestId)
 	router.POST("/test/data", addTest)
 	router.POST("/test/sensor", addTestSensor)
-	//return router.RunTLS(BindingAddr, CertFile, KeyFile)
-	return router.Run(BindingAddr)
+	return router.RunTLS(BindingAddr, CertFile, KeyFile)
+	//return router.Run(BindingAddr)
 }
