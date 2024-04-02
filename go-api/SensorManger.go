@@ -31,11 +31,11 @@ func initSensors() error {
 
 func sensorTrigger() {
 	for range Time.Tick(Time.Minute) {
-		go createMeasurement()
+		go createCompleteMeasurement()
 	}
 }
 
-func createMeasurement() {
+func createCompleteMeasurement() {
 	refreshSensors()
 
 	Log.Println("Tick")
@@ -45,6 +45,8 @@ func createMeasurement() {
 	copy(sensorList, sensors)
 	sensorsMutex.RUnlock()
 
+	time := Time.Now()
+
 	for _, sensor := range sensorList {
 		temp, err := getTemp(sensor)
 		if err != nil {
@@ -52,7 +54,7 @@ func createMeasurement() {
 			continue
 		}
 
-		err = createEntry(Time.Now(), sensor, temp)
+		err = createEntry(time, sensor, temp)
 		if err != nil {
 			Log.Println(err)
 			continue
