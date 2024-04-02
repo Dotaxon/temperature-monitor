@@ -4,20 +4,25 @@ import (
 	"github.com/gin-gonic/gin"
 	cors "github.com/rs/cors/wrapper/gin"
 	"log"
+	"os"
 )
 
 // const BindingAddr = "RPI-Heizung.fritz.box:3000"
 const BindingAddr = "localhost:3000"
 const CertFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung.fritz.box.crt"
 const KeyFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung.fritz.box.key"
+const DatabasePath = "./data.db"
 
+//const BindingAddr = "RPI-Heizung.fritz.box:3000"
 //const CertFile = "/etc/ssl/certs/RPI-Heizung.fritz.box.chained.crt"
 //const KeyFile = "/etc/ssl/private/RPI-Heizung.fritz.box.key"
+//const DatabasePath = "/etc/GO-API/data.db"
 
 var Log *log.Logger
 
 func main() {
-	Log = log.Default()
+	//Log = log.Default()
+	Log = log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
 	Log.Println("Logger initialized")
 
 	err := initDatabaseManager()

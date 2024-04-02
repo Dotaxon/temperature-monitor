@@ -12,7 +12,7 @@ import (
 var database *sql.DB
 
 func initDatabaseManager() error {
-	db, err := sql.Open("sqlite3", "./data.db")
+	db, err := sql.Open("sqlite3", DatabasePath)
 	if err != nil {
 		return err
 	}
