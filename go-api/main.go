@@ -7,7 +7,6 @@ import (
 	"os"
 )
 
-// const BindingAddr = "RPI-Heizung.fritz.box:3000"
 const BindingAddr = "localhost:3000"
 const CertFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung.fritz.box.crt"
 const KeyFile = "C:\\Users\\Vincent\\Desktop\\RPI-Heizung.fritz.box.key"
