@@ -48,7 +48,8 @@ export class DataComponent {
   ngOnInit(){
     //for future preselects filter the received sensors
     this.sensorService.getSensorsAsync().subscribe(sensors => {
-      sensors.forEach(sensor => this.selectedSensors.push({name: sensor.name, selected:false}))
+      sensors.forEach(sensor => this.selectedSensors.push({name: sensor.name, selected:false}));
+      this.selectedSensors.sort((a, b) => a.name.localeCompare(b.name))
     });
   }
 

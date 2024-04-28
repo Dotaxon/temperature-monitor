@@ -1,5 +1,5 @@
-<h2></h2>
-<div>
+<div class="chartView">
+  <div>
   <span>
     Interval:
     <select #intervalID (change)="onIntervalChange(intervalID.value)">
@@ -10,17 +10,19 @@
     <label for="endTime">Ende: </label>
     <input id="endTime" type="datetime-local" [(ngModel)]="selectedEndTime">
   </span>
-</div>
-<div>
-  <canvasjs-chart class="chart" [options]="chartOption"></canvasjs-chart>
-</div>
+  </div>
+  <div>
+    <canvasjs-chart class="chart" [options]="chartOption"></canvasjs-chart>
+  </div>
 
-<div class="sensorSelection">
+  <div class="sensorSelection">
   <span *ngFor="let selectedSensor of selectedSensors">
     <input type="checkbox" id="{{selectedSensor.name}}" [(ngModel)]="selectedSensor.selected"> <!--(change)="update()"-->
     <label for="{{selectedSensor.name}}">{{selectedSensor.name}}</label>
+    <br>
   </span>
-</div>
-<div>
-  <button (click)="update()">Update</button>
+  </div>
+  <div>
+    <button (click)="update()">Update</button>
+  </div>
 </div>
