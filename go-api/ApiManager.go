@@ -31,7 +31,7 @@ func updateSensorName(context *gin.Context) {
 }
 
 func getSensor(context *gin.Context) {
-	var id string = context.Param("id")
+	var id = context.Param("id")
 
 	sensor, err := GetSensorEntry(id)
 	if err != nil {
@@ -104,11 +104,10 @@ func getSensorsWithTemp(context *gin.Context) {
 	}
 
 	var sensorsT []SensorWithTemp
-	var err error
-	sensorsT, err = getTempsFrom(sensors)
-	if err != nil {
-		Log.Println(err)
-		context.JSON(http.StatusInternalServerError, err)
+	sensorsT = getTempsFrom(sensors)
+	if len(sensorsT) != 0 {
+		Log.Println("Got no temperatures at all")
+		context.JSON(http.StatusInternalServerError, "Got no temperatures at all")
 		return
 	}
 

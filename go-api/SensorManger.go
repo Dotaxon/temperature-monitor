@@ -102,13 +102,13 @@ func getTemp(sensorID string) (float32, error) {
 	return float32(temp), nil
 }
 
-func getTempsFrom(sensors []Sensor) ([]SensorWithTemp, error) {
+func getTempsFrom(sensors []Sensor) []SensorWithTemp {
 	list := make([]SensorWithTemp, 0, len(sensors))
 
 	for _, sensor := range sensors {
 		temp, err := getSensorTemp(sensor)
 		if err != nil {
-			return nil, err
+			Log.Println(err)
 		}
 
 		list = append(list, SensorWithTemp{
@@ -116,5 +116,5 @@ func getTempsFrom(sensors []Sensor) ([]SensorWithTemp, error) {
 			Temp:   temp,
 		})
 	}
-	return list, nil
+	return list
 }
