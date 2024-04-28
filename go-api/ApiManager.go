@@ -105,7 +105,7 @@ func getSensorsWithTemp(context *gin.Context) {
 
 	var sensorsT []SensorWithTemp
 	sensorsT = getTempsFrom(sensors)
-	if len(sensorsT) != 0 {
+	if len(sensorsT) == 0 {
 		Log.Println("Got no temperatures at all")
 		context.JSON(http.StatusInternalServerError, "Got no temperatures at all")
 		return
