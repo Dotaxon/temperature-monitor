@@ -109,6 +109,7 @@ func getTempsFrom(sensors []Sensor) []SensorWithTemp {
 		temp, err := getSensorTemp(sensor)
 		if err != nil {
 			Log.Println(err)
+			temp = math32.NaN()
 		}
 
 		list = append(list, SensorWithTemp{
