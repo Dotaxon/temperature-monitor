@@ -62,7 +62,8 @@ func initRouter() error {
 	c := cors.New(cors.Options{
 		AllowedOrigins: []string{"http://localhost:4200", "http://localhost", "http://RPI-Heizung:4200",
 			"http://RPI-Heizung", "http://RPI-Heizung.fritz.box", "https://localhost:4200", "https://localhost", "https://RPI-Heizung:4200",
-			"https://RPI-Heizung", "https://RPI-Heizung.fritz.box"},
+			"https://RPI-Heizung", "https://RPI-Heizung.fritz.box", "https://RPI-Heizung.olbring.org", "https://192.168.178.10",
+			"http://RPI-Heizung.olbring.org", "http://192.168.178.10"},
 		AllowedMethods:      []string{"GET", "POST", "PATCH"},
 		AllowPrivateNetwork: false,
 		AllowCredentials:    true,
