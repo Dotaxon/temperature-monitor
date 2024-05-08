@@ -17,6 +17,8 @@ const DatabasePath = "./data.db"
 //const KeyFile = "/etc/ssl/private/RPI-Heizung.fritz.box.key"
 //const DatabasePath = "/etc/GO-API/data.db"
 
+const UseOutsideSensor = true
+
 var Log *log.Logger
 
 func main() {
@@ -42,8 +44,12 @@ func main() {
 
 	Log.Printf("Got %d sensors", len(sensors))
 	for _, sensor := range sensors {
-		temp, _ := getTemp(sensor)
-		Log.Printf("Sensor %s has temperature %f \n", sensor, temp)
+		temp, err := getTemp(sensor)
+		if err != nil {
+			Log.Printf("Error while reading temp %s\n", err.Error())
+		} else {
+			Log.Printf("Sensor %s has temperature %f \n", sensor, temp)
+		}
 	}
 
 	//generateEntries(60*1 + 1)
@@ -82,6 +88,6 @@ func initRouter() error {
 	router.GET("/test/:id", getTestId)
 	router.POST("/test/data", addTest)
 	router.POST("/test/sensor", addTestSensor)
-	return router.RunTLS(BindingAddr, CertFile, KeyFile)
-	//return router.Run(BindingAddr)
+	//return router.RunTLS(BindingAddr, CertFile, KeyFile)
+	return router.Run(BindingAddr)
 }

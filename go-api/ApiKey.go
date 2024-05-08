@@ -1,6 +1,6 @@
 package main
 
-//This file is in gitignore every change has to be committed manually
+//TODO add file to git ignore and push a sample of this file
 
 // API_KEY of https://openweathermap.org/
 var API_KEY = "toChange"

@@ -11,6 +11,7 @@ import (
 
 var sensors []string
 var sensorsMutex = sync.RWMutex{}
+var OUTSIDE_TEMP_SENSOR = "OUTSIDE_TEMP_SENSOR"
 
 func initSensors() error {
 	refreshSensors()
@@ -65,12 +66,16 @@ func createCompleteMeasurement() {
 
 func refreshSensors() {
 	newSensorCandidates, _ := ds18b20.Sensors()
-	newSensors := make([]string, 0, len(newSensorCandidates))
+	newSensors := make([]string, 0, len(newSensorCandidates)+1)
 
 	for _, sensorCandidate := range newSensorCandidates {
 		if strings.HasPrefix(sensorCandidate, "28") {
 			newSensors = append(newSensors, sensorCandidate)
 		}
+	}
+
+	if UseOutsideSensor {
+		newSensors = append(newSensors, OUTSIDE_TEMP_SENSOR)
 	}
 
 	sensorsMutex.Lock()
@@ -95,6 +100,16 @@ func getSensorTemp(sensor Sensor) (float32, error) {
 }
 
 func getTemp(sensorID string) (float32, error) {
+
+	//Uses special behaviour for outside temp sensor
+	if sensorID == OUTSIDE_TEMP_SENSOR {
+		temp, err := GetTempViaWeb()
+		if err != nil {
+			return math32.NaN(), fmt.Errorf("could not read %s error: %s", sensorID, err.Error())
+		}
+		return temp, nil
+	}
+
 	temp, err := ds18b20.Temperature(sensorID)
 	if err != nil {
 		return math32.NaN(), fmt.Errorf("could not read %s", sensorID)
