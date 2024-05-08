@@ -3,3 +3,4 @@ data.db-journal
 go-api*
 go-api.exe
 ./binaries
+ApiKey.go
