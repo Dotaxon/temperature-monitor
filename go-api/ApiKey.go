@@ -4,3 +4,7 @@ package main
 
 // API_KEY of https://openweathermap.org/
 var API_KEY = "toChange"
+
+var LATITUDE = "toChange"
+
+var LONGITUDE = "toChange"
