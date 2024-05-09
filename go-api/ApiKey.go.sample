@@ -1,0 +1,3 @@
+package main
+// API_KEY of https://openweathermap.org/
+var API_KEY = "toChange"

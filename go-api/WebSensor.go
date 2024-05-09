@@ -8,11 +8,6 @@ import (
 	"time"
 )
 
-type ResponseTest struct {
-	Item1 int    `json:"cod"`
-	Item2 string `json:"message"`
-}
-
 type Response struct {
 	Temperature float32 `json:"temperature"`
 }
