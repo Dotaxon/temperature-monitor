@@ -17,7 +17,7 @@ const DatabasePath = "./data.db"
 //const KeyFile = "/etc/ssl/private/RPI-Heizung.fritz.box.key"
 //const DatabasePath = "/etc/GO-API/data.db"
 
-const UseOutsideSensor = true
+const UseWebSensors = true
 
 var Log *log.Logger
 
@@ -32,6 +32,8 @@ func main() {
 		return
 	}
 	Log.Println("Successfully initialized DatabaseManager")
+
+	initWebSensors()
 
 	err = initSensors()
 	if err != nil {

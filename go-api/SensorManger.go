@@ -9,9 +9,10 @@ import (
 	Time "time"
 )
 
+const SENSOR_NOT_THERE_TEMP float32 = -999
+
 var sensors []string
 var sensorsMutex = sync.RWMutex{}
-var OUTSIDE_TEMP_SENSOR = "OUTSIDE_TEMP_SENSOR"
 
 func initSensors() error {
 	refreshSensors()
@@ -74,8 +75,8 @@ func refreshSensors() {
 		}
 	}
 
-	if UseOutsideSensor {
-		newSensors = append(newSensors, OUTSIDE_TEMP_SENSOR)
+	if UseWebSensors {
+		newSensors = append(newSensors, getAllWebSensorIDs()...)
 	}
 
 	sensorsMutex.Lock()
@@ -101,9 +102,10 @@ func getSensorTemp(sensor Sensor) (float32, error) {
 
 func getTemp(sensorID string) (float32, error) {
 
-	//Uses special behaviour for outside temp sensor
-	if sensorID == OUTSIDE_TEMP_SENSOR {
-		temp, err := GetTempViaWeb()
+	//Uses special behaviour for web sensors
+	if strings.HasPrefix(sensorID, WebSensorPrefix) {
+		webSensor := getWebSensor(sensorID)
+		temp, err := webSensor.GetTempViaWeb()
 		if err != nil {
 			return math32.NaN(), fmt.Errorf("could not read %s error: %s", sensorID, err.Error())
 		}
@@ -124,7 +126,7 @@ func getTempsFrom(sensors []Sensor) []SensorWithTemp {
 		temp, err := getSensorTemp(sensor)
 		if err != nil {
 			Log.Println(err)
-			temp = -999
+			temp = SENSOR_NOT_THERE_TEMP
 		}
 
 		list = append(list, SensorWithTemp{

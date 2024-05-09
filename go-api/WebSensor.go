@@ -1,54 +1,37 @@
 package main
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
-	"io"
-	"net/http"
-	"time"
+	"github.com/rkusa/gm/math32"
 )
 
-type Response struct {
-	Temperature float32 `json:"temperature"`
+// WebSensor represents a sensor that retrieves temperature data via http(s).
+type WebSensor struct {
+	SensorID        string                  // SensorID represents the unique identifier of the sensor.
+	GetTempFunction func() (float32, error) // GetTempFunction is a function reference to retrieve temperature data.
 }
 
-func GetRequestUrl_OPENWEATHER() string {
-	if API_KEY == "toChange" || LONGITUDE == "toChange" || LATITUDE == "toChange" {
-		Log.Println("Missing part in Request Url please change ApiKey.go")
-		return ""
+// NewWebSensor creates a new WebSensor instance.
+func NewWebSensor(sensorID string, getTempFunction func() (float32, error)) *WebSensor {
+	return &WebSensor{
+		SensorID:        sensorID,
+		GetTempFunction: getTempFunction,
 	}
-	return fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s", API_KEY, LATITUDE, LONGITUDE)
 }
 
-func GetRequestUrl_ESP32() string {
-	return "http://esp32-temperatur-sensor.fritz.box/"
-}
-
-func GetTempViaWeb() (float32, error) {
-	requestUrl := GetRequestUrl_ESP32()
-
-	client := &http.Client{
-		Timeout: 2 * time.Second, // Timeout set to 1 second
+// GetTempViaWeb retrieves temperature data via web.
+func (ws *WebSensor) GetTempViaWeb() (float32, error) {
+	// Check if GetTempFunction is set
+	if ws.GetTempFunction == nil {
+		return math32.NaN(), errors.New("GetTempFunction is not set")
 	}
 
-	response, err := client.Get(requestUrl)
+	// Call the GetTempFunction
+	temp, err := ws.GetTempFunction()
 	if err != nil {
-		return 0, fmt.Errorf("could not get temperature from api error: %s", err.Error())
-	}
-	defer response.Body.Close()
-
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		Log.Println("Error reading response body:", err)
-		return 0, fmt.Errorf("could not get temperature from api error: %s", err.Error())
+		return math32.NaN(), fmt.Errorf("error calling GetTempFunction: %v", err)
 	}
 
-	var parsedResponse Response
-	err = json.Unmarshal(body, &parsedResponse)
-	if err != nil {
-		Log.Println("Error reading response body:", err)
-		return 0, fmt.Errorf("could not get temperature from api error: %s", err.Error())
-	}
-
-	return parsedResponse.Temperature, nil
+	return temp, nil
 }
