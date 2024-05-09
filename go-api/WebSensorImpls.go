@@ -11,8 +11,9 @@ import (
 const (
 	openWeatherMapURL     = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s"
 	esp32SensorURL        = "http://esp32-temperatur-sensor.fritz.box/"
-	WebSensorPrefix       = "WEB_SENSOR_"                        //Every outside sensor has to use the SENSOR_PREFIX
-	SensorOpenWeatherName = WebSensorPrefix + "OPEN_WEATHER_API" //Every outside sensor has to use the SENSOR_PREFIX
+	WebSensorPrefix       = "WEB_SENSOR_" //Every outside sensor has to use the SENSOR_PREFIX
+	SensorOpenWeatherName = WebSensorPrefix + "OPEN_WEATHER_API"
+	SensorESP32Name       = WebSensorPrefix + "ESP32"
 )
 
 var WebSensors []WebSensor
@@ -23,9 +24,12 @@ func initWebSensors() {
 		return
 	}
 
-	WebSensors = make([]WebSensor, 0, 1)
+	WebSensors = make([]WebSensor, 0, 2)
 
 	openWeatherMapSensor := NewWebSensor(SensorOpenWeatherName, getTemperatureOpenWeatherMap)
+	WebSensors = append(WebSensors, *openWeatherMapSensor)
+
+	openWeatherMapSensor = NewWebSensor(SensorESP32Name, getTemperatureESP32)
 	WebSensors = append(WebSensors, *openWeatherMapSensor)
 }
 
@@ -121,6 +125,9 @@ func getTemperatureESP32() (float32, error) {
 	temperature, ok := data["temperature"]
 	if !ok {
 		return math32.NaN(), fmt.Errorf("unable to parse 'temperature' value from response")
+	}
+	if temperature <= -127+0.001 {
+		return math32.NaN(), fmt.Errorf("sensor issue temperature is below -127 degrees Celsisus")
 	}
 
 	return temperature, nil
