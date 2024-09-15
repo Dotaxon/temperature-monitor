@@ -49,8 +49,8 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rkusa/gm v0.0.0-20160203133140-acc6b6d0b64a h1:isLzfNyCDEFaua2vQtlM7cr5PplqEBHqzDf8AdX6te8=
 github.com/rkusa/gm v0.0.0-20160203133140-acc6b6d0b64a/go.mod h1:4fD+lDdURkq7V+MRsxfjkVKcgekFRZB2qPgJYflAHY8=
-github.com/rs/cors v1.10.1 h1:L0uuZVXIKlI1SShY2nhFfo44TYvDPQ1w4oFkUJNfhyo=
-github.com/rs/cors v1.10.1/go.mod h1:XyqrcTp5zjWr1wsJ8PIRZssZ8b/WMcMf71DJnit4EMU=
+github.com/rs/cors v1.11.0 h1:0B9GE/r9Bc2UxRMMtymBkHTenPkHDv0CW4Y98GBY+po=
+github.com/rs/cors v1.11.0/go.mod h1:XyqrcTp5zjWr1wsJ8PIRZssZ8b/WMcMf71DJnit4EMU=
 github.com/rs/cors/wrapper/gin v0.0.0-20240228164225-8d33ca4794ea h1:zDqxp+k0Xtoh+2gTtG2eODpGSrNbnqQ0WRO1ycox22g=
 github.com/rs/cors/wrapper/gin v0.0.0-20240228164225-8d33ca4794ea/go.mod h1:gmu40DuK3SLdKUzGOUofS3UDZwyeOUy6ZjPPuaALatw=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
