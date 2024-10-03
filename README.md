@@ -1,4 +1,4 @@
-##THIS README was written for my own RPI-Heizung raspberry pi zero
+## THIS README was written for my own RPI-Heizung raspberry pi zero
 **therefore it will not apply to you**
 
 
