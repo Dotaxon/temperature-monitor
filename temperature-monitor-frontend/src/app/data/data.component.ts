@@ -35,14 +35,16 @@ export class DataComponent {
   protected selectedStartTime : string;
   protected selectedEndTime : string;
   protected chartOption = {}
+  private isoTimeOption : {};
 
   constructor(private dataService: DataService, private sensorService: SensorService) {
     this.selectedInterval = new CollectionInterval(CollectionIntervalEnum.Minute);
+    this.isoTimeOption = { includeOffset: false, suppressSeconds: true, suppressMilliseconds: true };
 
     this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({minutes: 30})).startOf('minute')
-      .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
+      .toISO(this.isoTimeOption);
     this.selectedEndTime = DateTime.now().startOf('minute')
-      .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true });
+      .toISO(this.isoTimeOption);
   }
 
   ngOnInit(){
@@ -52,6 +54,18 @@ export class DataComponent {
       this.selectedSensors.sort((a, b) => a.name.localeCompare(b.name))
     });
   }
+
+  setTimeIntervalToday(){
+    this.selectedStartTime = DateTime.now().startOf('day').toISO(this.isoTimeOption);
+    this.selectedEndTime = DateTime.now().startOf('minute').toISO(this.isoTimeOption);
+  }
+
+  setTimeIntervalLastXHours(x: number){
+    this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({hours: x})).startOf('minute')
+      .toISO(this.isoTimeOption);
+    this.selectedEndTime = DateTime.now().startOf('minute').toISO(this.isoTimeOption);
+  }
+
 
   async update(){
     console.log("> update ======================================")

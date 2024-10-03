@@ -9,20 +9,24 @@
     <input id="startTime" type="datetime-local" [(ngModel)]="selectedStartTime">
     <label for="endTime">Ende: </label>
     <input id="endTime" type="datetime-local" [(ngModel)]="selectedEndTime">
+    <button (click)="setTimeIntervalToday()" >Heute</button>
+    <button (click)="setTimeIntervalLastXHours(6)">letzten 6 Stunden</button>
+    <button (click)="setTimeIntervalLastXHours(1)">letzte Stunde</button>
   </span>
   </div>
   <div>
     <canvasjs-chart class="chart" [options]="chartOption"></canvasjs-chart>
   </div>
 
-  <div class="sensorSelection">
-  <span *ngFor="let selectedSensor of selectedSensors">
-    <input type="checkbox" id="{{selectedSensor.name}}" [(ngModel)]="selectedSensor.selected"> <!--(change)="update()"-->
-    <label for="{{selectedSensor.name}}">{{selectedSensor.name}}</label>
-    <br>
-  </span>
-  </div>
+
   <div>
     <button (click)="update()">Update</button>
+  </div>
+  <div class="sensorSelection">
+    <span *ngFor="let selectedSensor of selectedSensors">
+      <input type="checkbox" id="{{selectedSensor.name}}" [(ngModel)]="selectedSensor.selected"> <!--(change)="update()"-->
+      <label for="{{selectedSensor.name}}">{{selectedSensor.name}}</label>
+      <br>
+    </span>
   </div>
 </div>

@@ -34,7 +34,6 @@ export class CollectionInterval {
 //https://canvasjs.com/docs/charts/chart-options/axisx/valueformatstring/
     switch (this.currentInterval) {
       case CollectionIntervalEnum.Minute:
-        return "HH:mm";
       case CollectionIntervalEnum.Hour:
         return "D.M HH:mm";
       case CollectionIntervalEnum.Day:
