@@ -38,6 +38,7 @@ export class DataComponent {
   //protected chartOption = {}
   private readonly isoTimeOption : {};
   protected chart : any = undefined;
+  protected infoText : string = "";
 
   constructor(private dataService: DataService, private sensorService: SensorService) {
     this.selectedInterval = new CollectionInterval(CollectionIntervalEnum.Minute);
@@ -59,7 +60,7 @@ export class DataComponent {
 
   setTimeIntervalToday(){
     this.selectedStartTime = DateTime.now().startOf('day').toISO(this.isoTimeOption);
-    this.selectedEndTime = DateTime.now().startOf('minute').toISO(this.isoTimeOption);
+    this.selectedEndTime = DateTime.now().endOf('day').startOf('minute').toISO(this.isoTimeOption);
   }
 
   setTimeIntervalLastXHours(x: number){
@@ -71,6 +72,7 @@ export class DataComponent {
 
   async update(){
     console.log("> update ======================================")
+    this.infoText = "laden"
 
     let activeSensors = this.selectedSensors.filter(sensor => sensor.selected);
     let dataCollections : DataCollection[] = [];
@@ -108,6 +110,12 @@ export class DataComponent {
     this.chart.render();
 
     console.log(tmp.data);
+
+    this.infoText = "";
+    if (tmp.data.length === 0){
+      this.infoText = "keine Daten erhalten";
+    }
+
     console.log("< update ======================================")
   }
 
