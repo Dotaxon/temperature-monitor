@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
+import * as CanvasJs from "@canvasjs/charts"
 import {DataService} from "../data.service";
 import {SensorService} from "../sensor.service";
 import {SelectedSensors, Sensor} from "../../interfaces/sensor";
@@ -34,8 +35,9 @@ export class DataComponent {
   protected selectedInterval: CollectionInterval;
   protected selectedStartTime : string;
   protected selectedEndTime : string;
-  protected chartOption = {}
-  private isoTimeOption : {};
+  //protected chartOption = {}
+  private readonly isoTimeOption : {};
+  protected chart : any = undefined;
 
   constructor(private dataService: DataService, private sensorService: SensorService) {
     this.selectedInterval = new CollectionInterval(CollectionIntervalEnum.Minute);
@@ -95,14 +97,17 @@ export class DataComponent {
       // console.log(`Got dataCollection for ${activeSensor.name}`);
     }
 
-    // console.log("Here");
-    // console.log(dataCollections);
-    // console.log(this.dataService.mockDataCollections);
+    //this.chartOption = this.getNewChartOption(this.selectedInterval, dataCollections);
+    let tmp = this.getNewChartOption(this.selectedInterval, dataCollections);
 
-    this.chartOption = this.getNewChartOption(this.selectedInterval, dataCollections);
-    console.log(this.chartOption);
-    // console.log(this.selectedInterval.CurrentInterval);
-    // console.log(this.selectedStartTime);
+    if (this.chart !== undefined)
+    {
+      this.chart.destroy();
+    }
+    this.chart = new CanvasJs.Chart("chartContainer", tmp);
+    this.chart.render();
+
+    console.log(tmp.data);
     console.log("< update ======================================")
   }
 
@@ -220,25 +225,25 @@ export class DataComponent {
         { x: new Date(2021, 11, 1), y: 33 }
       ]
     },
-      {
-        type: "line",
-        name: "Maximum",
-        showInLegend: true,
-        yValueFormatString: "#,###°C",
-        dataPoints: [
-          { x: new Date(2021, 0, 1), y: 40 },
-          { x: new Date(2021, 1, 1), y: 42 },
-          { x: new Date(2021, 2, 1), y: 50 },
-          { x: new Date(2021, 3, 1), y: 62 },
-          { x: new Date(2021, 4, 1), y: 72 },
-          { x: new Date(2021, 5, 1), y: 80 },
-          { x: new Date(2021, 6, 1), y: 85 },
-          { x: new Date(2021, 7, 1), y: 84 },
-          { x: new Date(2021, 8, 1), y: 76 },
-          { x: new Date(2021, 9, 1), y: 64 },
-          { x: new Date(2021, 10, 1), y: 54 },
-          { x: new Date(2021, 11, 1), y: 44 }
-        ]
+    {
+      type: "line",
+      name: "Maximum",
+      showInLegend: true,
+      yValueFormatString: "#,###°C",
+      dataPoints: [
+        { x: new Date(2021, 0, 1), y: 40 },
+        { x: new Date(2021, 1, 1), y: 42 },
+        { x: new Date(2021, 2, 1), y: 50 },
+        { x: new Date(2021, 3, 1), y: 62 },
+        { x: new Date(2021, 4, 1), y: 72 },
+        { x: new Date(2021, 5, 1), y: 80 },
+        { x: new Date(2021, 6, 1), y: 85 },
+        { x: new Date(2021, 7, 1), y: 84 },
+        { x: new Date(2021, 8, 1), y: 76 },
+        { x: new Date(2021, 9, 1), y: 64 },
+        { x: new Date(2021, 10, 1), y: 54 },
+        { x: new Date(2021, 11, 1), y: 44 }
+      ]
       }]
   }
   protected readonly CollectionInterval = CollectionInterval;
