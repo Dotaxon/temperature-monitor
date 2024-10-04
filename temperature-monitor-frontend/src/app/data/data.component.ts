@@ -3,8 +3,8 @@ import {CanvasJSAngularChartsModule} from "@canvasjs/angular-charts";
 import * as CanvasJs from "@canvasjs/charts"
 import {DataService} from "../data.service";
 import {SensorService} from "../sensor.service";
-import {SelectedSensors, Sensor} from "../../interfaces/sensor";
-import {KeyValue, NgForOf} from "@angular/common";
+import {SelectedSensors} from "../../interfaces/sensor";
+import {NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {CollectionIntervalEnum} from "../../enums/Interval";
 import {
@@ -16,7 +16,7 @@ import {
 } from "../../interfaces/dataInterfaces";
 import {CollectionInterval} from "../CollectionInterval";
 import {DateTime, Duration} from "luxon";
-import {firstValueFrom, from, interval as rxjsInterval, scheduled} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-data',
