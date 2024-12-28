@@ -7,8 +7,8 @@ const char* ssid = "Olbring";
 const char* password = "PASSWORD";
 const char* hostname = "esp32-temperatur-sensor"; // Change this to your desired hostname
 
-// Data wire is connected to GPIO 4
-#define ONE_WIRE_BUS 4
+// Data wire is connected to GPIO 32
+#define ONE_WIRE_BUS 32
 
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
