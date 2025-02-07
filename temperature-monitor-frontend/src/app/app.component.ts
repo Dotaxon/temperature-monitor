@@ -4,11 +4,10 @@ import {SensorsComponent} from "./sensors/sensors.component";
 import {SidebarComponent} from "./sidebar/sidebar.component";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, SensorsComponent, SidebarComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    imports: [RouterOutlet, SidebarComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'temperature-monitor-frontend';

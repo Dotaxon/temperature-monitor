@@ -4,14 +4,13 @@ import {RouterLink} from "@angular/router";
 import {SidebarElement} from "../../interfaces/sidebarElement";
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [
-    NgForOf,
-    RouterLink
-  ],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+    selector: 'app-sidebar',
+    imports: [
+        NgForOf,
+        RouterLink
+    ],
+    templateUrl: './sidebar.component.html',
+    styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
 

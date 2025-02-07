@@ -5,14 +5,13 @@ import {NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 
 @Component({
-  selector: 'app-sensors',
-  standalone: true,
-  imports: [
-    NgForOf,
-    FormsModule
-  ],
-  templateUrl: './sensors.component.html',
-  styleUrl: './sensors.component.css'
+    selector: 'app-sensors',
+    imports: [
+        NgForOf,
+        FormsModule
+    ],
+    templateUrl: './sensors.component.html',
+    styleUrl: './sensors.component.css'
 })
 export class SensorsComponent {
 

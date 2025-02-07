@@ -19,15 +19,14 @@ import {DateTime, Duration} from "luxon";
 import {firstValueFrom} from 'rxjs';
 
 @Component({
-  selector: 'app-data',
-  standalone: true,
-  imports: [
-    CanvasJSAngularChartsModule,
-    NgForOf,
-    FormsModule
-  ],
-  templateUrl: './data.component.html',
-  styleUrl: './data.component.css'
+    selector: 'app-data',
+    imports: [
+        CanvasJSAngularChartsModule,
+        NgForOf,
+        FormsModule
+    ],
+    templateUrl: './data.component.html',
+    styleUrl: './data.component.css'
 })
 export class DataComponent {
 
