@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Sensor, SensorWithTemp} from "../interfaces/sensor";
 import {catchError, Observable, of, retry, throwError} from "rxjs";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import {BackendURL} from "./app.config";
 import { interval as rxjsInterval} from 'rxjs';
 

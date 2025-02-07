@@ -7,7 +7,7 @@ import {
 } from "../interfaces/dataInterfaces";
 import {DateTime, Duration, DurationLike} from "luxon";
 import {CollectionIntervalEnum} from "../enums/Interval";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {BackendURL} from "./app.config";
 
 @Injectable({
