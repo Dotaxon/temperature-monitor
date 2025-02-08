@@ -43,10 +43,7 @@ export class DataComponent {
     this.selectedInterval = new CollectionInterval(CollectionIntervalEnum.Minute);
     this.isoTimeOption = { includeOffset: false, suppressSeconds: true, suppressMilliseconds: true };
 
-    this.selectedStartTime = DateTime.now().minus(Duration.fromDurationLike({minutes: 30})).startOf('minute')
-      .toISO(this.isoTimeOption);
-    this.selectedEndTime = DateTime.now().startOf('minute')
-      .toISO(this.isoTimeOption);
+    this.setTimeIntervalToday();
   }
 
   ngOnInit(){
