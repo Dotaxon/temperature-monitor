@@ -17,3 +17,10 @@ a2ensite myown-ssl.conf #enable config
 systemctl reload apache2
 systemclt status apache2 #check if everything works
 
+### to renew certificate
+1. `sudo certbot certonly --manual -d "*.<Domain>"`
+2. save certs to xca
+3. transfer certs to rpi-heizung (and other places where it is used)
+4. save certs to /etc/ssl/...
+5. execute `update-ca-certificates`
+6. wipe the cert in every place you copied it to (except the place where certbot created it)
