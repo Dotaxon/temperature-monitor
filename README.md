@@ -23,4 +23,5 @@ systemclt status apache2 #check if everything works
 3. transfer certs to rpi-heizung (and other places where it is used)
 4. save certs to /etc/ssl/...
 5. execute `update-ca-certificates`
-6. wipe the cert in every place you copied it to (except the place where certbot created it)
+6. make sure main.go also uses the right certs and maybe recomiple it with `go build`
+7. wipe the cert in every place you copied it to (except the place where certbot created it)
