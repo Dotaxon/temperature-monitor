@@ -25,3 +25,7 @@ systemclt status apache2 #check if everything works
 5. execute `update-ca-certificates`
 6. make sure main.go also uses the right certs and maybe recomiple it with `go build`
 7. wipe the cert in every place you copied it to (except the place where certbot created it)
+
+## Important
+The database schema was designed when my SQL knowledge was still limited, and therefore it contains structural issues.  
+In particular, foreign key definitions are incomplete, so full referential integrity is not guaranteed.  
