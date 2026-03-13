@@ -1,10 +1,11 @@
 package main
 
 import (
+	"go-api/logger"
+	"log"
+
 	"github.com/gin-gonic/gin"
 	cors "github.com/rs/cors/wrapper/gin"
-	"log"
-	"os"
 )
 
 const BindingAddr = "localhost:3000"
@@ -19,13 +20,9 @@ const DatabasePath = "./data.db"
 
 const UseWebSensors = true
 
-var Log *log.Logger
+var Log *log.Logger = logger.Log
 
 func main() {
-	//Log = log.Default()
-	Log = log.New(os.Stdout, "", log.Ldate|log.Ltime|log.Lshortfile)
-	Log.Println("Logger initialized")
-
 	err := initDatabaseManager()
 	if err != nil {
 		Log.Fatal(err)
