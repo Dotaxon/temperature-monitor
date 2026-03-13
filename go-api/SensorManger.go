@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/rkusa/gm/math32"
-	"github.com/yryz/ds18b20"
+	"go-api/ds18b20wrapper"
 	"strings"
 	"sync"
 	Time "time"
+
+	"github.com/rkusa/gm/math32"
 )
 
 const SENSOR_NOT_THERE_TEMP float32 = -999
@@ -66,7 +67,7 @@ func createCompleteMeasurement() {
 }
 
 func refreshSensors() {
-	newSensorCandidates, _ := ds18b20.Sensors()
+	newSensorCandidates, _ := ds18b20wrapper.GetSensors()
 	newSensors := make([]string, 0, len(newSensorCandidates)+1)
 
 	for _, sensorCandidate := range newSensorCandidates {
@@ -112,11 +113,11 @@ func getTemp(sensorID string) (float32, error) {
 		return temp, nil
 	}
 
-	temp, err := ds18b20.Temperature(sensorID)
+	temp, err := ds18b20wrapper.GetTemp(sensorID)
 	if err != nil {
 		return math32.NaN(), fmt.Errorf("could not read %s", sensorID)
 	}
-	return float32(temp), nil
+	return temp, nil
 }
 
 func getTempsFrom(sensors []Sensor) []SensorWithTemp {
